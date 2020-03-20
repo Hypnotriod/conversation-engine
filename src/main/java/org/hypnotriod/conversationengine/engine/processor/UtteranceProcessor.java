@@ -21,6 +21,9 @@ import org.springframework.util.StringUtils;
 public class UtteranceProcessor {
 
     @Autowired
+    DialogState dialogState;
+
+    @Autowired
     CustomDataService customDataService;
 
     @Autowired
@@ -77,7 +80,7 @@ public class UtteranceProcessor {
                     spokenQuery.getQuery(),
                     spokenQuery.getLanguage(),
                     spokenQuery.getCommand(),
-                    spokenQuery.getContext(),
+                    dialogState.getContext(),
                     recognizedCustomDatas);
         } else {
             return null;

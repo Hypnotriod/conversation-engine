@@ -16,7 +16,7 @@ public class SpokenQueryService {
     @Autowired
     SpokenQueryRepository spokenQueryRepository;
 
-    public void add(SpokenQuery query) {
+    public void save(SpokenQuery query) {
         spokenQueryRepository.save(query);
     }
 
