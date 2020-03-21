@@ -14,7 +14,7 @@ public class RecognizedCustomData {
 
     @Getter
     @ToString
-    public static class IdValueMatch {
+    public static final class IdValueMatch {
 
         private final Long id;
         private final String value;

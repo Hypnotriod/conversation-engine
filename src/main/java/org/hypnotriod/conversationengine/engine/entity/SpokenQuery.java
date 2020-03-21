@@ -7,7 +7,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import lombok.Data;
 
@@ -27,7 +29,11 @@ public class SpokenQuery implements Serializable {
     private String query;
     private String language;
     private String command;
-    @OneToMany(mappedBy = "spokenQuery", cascade = CascadeType.ALL)
+    @ManyToMany
+    @JoinTable(
+            name = "spoken_query_spoken_context",
+            joinColumns = @JoinColumn(name = "spoken_query_id"),
+            inverseJoinColumns = @JoinColumn(name = "spoken_context_id"))
     private List<SpokenContext> contexts;
 
     public SpokenQuery() {
@@ -39,7 +45,5 @@ public class SpokenQuery implements Serializable {
         this.language = language;
         this.command = command;
         this.contexts = contexts;
-
-        contexts.forEach(context -> context.setSpokenQuery(this));
     }
 }

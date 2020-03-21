@@ -23,6 +23,22 @@ public class UtteranceCustomDataParserService {
         return parseSpokenQueryDatas(utteranceDatas, spokenQuery);
     }
 
+    private List<String> extractDatasFromUserUtterance(String utterance, String query) {
+        List<String> result = new ArrayList<>();
+        String[] dummyLoads = query.split(DATA_PATTERN_REGEX);
+
+        for (int i = 0; i < dummyLoads.length; i++) {
+            int dataStartIndex = utterance.indexOf(dummyLoads[i]) + dummyLoads[i].length();
+            int dataEndIndex = (i + 1 == dummyLoads.length)
+                    ? utterance.length()
+                    : utterance.indexOf(dummyLoads[i + 1]);
+            String data = utterance.substring(dataStartIndex, dataEndIndex);
+            result.add(data);
+        }
+
+        return result;
+    }
+
     private List<UtteranceCustomData> parseSpokenQueryDatas(List<String> utteranceDatas, SpokenQuery spokenQuery) {
         List<UtteranceCustomData> result = new ArrayList<>();
         Matcher matcher = DATA_PATTERN.matcher(spokenQuery.getQuery());
@@ -44,21 +60,5 @@ public class UtteranceCustomDataParserService {
         String repositoryKey = repositoryNameKey[1];
 
         return new UtteranceCustomData(repositoryName, repositoryKey, data);
-    }
-
-    private List<String> extractDatasFromUserUtterance(String utterance, String query) {
-        List<String> result = new ArrayList<>();
-        String[] dummyLoads = query.split(DATA_PATTERN_REGEX);
-
-        for (int i = 0; i < dummyLoads.length; i++) {
-            int dataStartIndex = utterance.indexOf(dummyLoads[i]) + dummyLoads[i].length();
-            int dataEndIndex = (i + 1 == dummyLoads.length)
-                    ? utterance.length()
-                    : utterance.indexOf(dummyLoads[i + 1]);
-            String data = utterance.substring(dataStartIndex, dataEndIndex);
-            result.add(data);
-        }
-
-        return result;
     }
 }

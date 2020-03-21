@@ -21,7 +21,7 @@ import org.springframework.util.StringUtils;
 public class UtteranceProcessor {
 
     @Autowired
-    DialogState dialogState;
+    DialogState dialogState; //todo: find better solution?
 
     @Autowired
     CustomDataService customDataService;
@@ -35,8 +35,8 @@ public class UtteranceProcessor {
     public void process(String utterance) {
         utterance = prepareUtterance(utterance);
 
-        List<UtteranceRecognitionResult> utteranceRecognitionResults
-                = processSpokenQueries(spokenQueryService.findAllMathces(utterance), utterance);
+        List<SpokenQuery> matchedSpokenQuerys = spokenQueryService.findAllMathces(utterance, dialogState.getContext());
+        List<UtteranceRecognitionResult> utteranceRecognitionResults = processSpokenQueries(matchedSpokenQuerys, utterance);
 
         if (utteranceRecognitionResults.size() > 0) {
             System.out.println(utteranceRecognitionResults.toString());

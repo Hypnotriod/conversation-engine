@@ -20,7 +20,7 @@ public class SpokenQueryService {
         spokenQueryRepository.save(query);
     }
 
-    public List<SpokenQuery> findAllMathces(String query) {
-        return spokenQueryRepository.findAllMathces(query);
+    public List<SpokenQuery> findAllMathces(String utterance, String context) {
+        return spokenQueryRepository.findAllMathces(utterance, context);
     }
 }

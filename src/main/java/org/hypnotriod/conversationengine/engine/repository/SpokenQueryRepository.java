@@ -15,6 +15,12 @@ import org.springframework.stereotype.Repository;
 @Transactional
 public interface SpokenQueryRepository extends JpaRepository<SpokenQuery, Long> {
 
-    @Query(value = "SELECT * FROM spoken_query WHERE ?1 ~ spoken_query.regexp", nativeQuery = true)
-    List<SpokenQuery> findAllMathces(String query);
+    @Query(value = "SELECT * FROM spoken_query sq "
+            + "LEFT JOIN spoken_query_spoken_context sqsc "
+            + "ON sq.id = sqsc.spoken_query_id "
+            + "LEFT JOIN spoken_context sc "
+            + "ON sc.id = sqsc.spoken_context_id "
+            + "WHERE sc.name = ?2 "
+            + "AND ?1 ~ sq.regexp", nativeQuery = true)
+    List<SpokenQuery> findAllMathces(String utterance, String context);
 }
