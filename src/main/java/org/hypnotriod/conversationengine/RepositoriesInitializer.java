@@ -38,6 +38,7 @@ public class RepositoriesInitializer {
     private void init() {
         spokenQueryService.save(new SpokenQuery("search for [?]", "en-US", "SEARCH", mapToSpokenContexts("BASE_CONTEXT")));
         spokenQueryService.save(new SpokenQuery("google for [?]", "en-US", "SEARCH", mapToSpokenContexts("BASE_CONTEXT")));
+        spokenQueryService.save(new SpokenQuery("google [?]", "en-US", "SEARCH", mapToSpokenContexts("BASE_CONTEXT")));
         spokenQueryService.save(new SpokenQuery("go to [destination.value] by [vehicle.value]", "en-US", "GO_TO_DESTINATION_BY_VECHICLE", mapToSpokenContexts("BASE_CONTEXT")));
         spokenQueryService.save(new SpokenQuery("go to [destination.value]", "en-US", "GO_TO_DESTINATION", mapToSpokenContexts("BASE_CONTEXT")));
         spokenQueryService.save(new SpokenQuery("go to [destination.value] right now", "en-US", "GO_TO_DESTINATION_NOW", mapToSpokenContexts("BASE_CONTEXT", "TEST_CONTEXT")));

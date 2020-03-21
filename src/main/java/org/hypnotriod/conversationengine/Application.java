@@ -2,7 +2,7 @@ package org.hypnotriod.conversationengine;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import org.hypnotriod.conversationengine.engine.processor.UtteranceProcessor;
+import org.hypnotriod.conversationengine.engine.ConversationEngine;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -16,7 +16,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class Application implements CommandLineRunner {
 
     @Autowired
-    UtteranceProcessor utteranceProcessor;
+    private ConversationEngine conversationEngine;
+
+    @Autowired
+    CommandsInitializer commandsInitializer;
 
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
@@ -25,7 +28,7 @@ public class Application implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        
+
         System.out.println();
         System.out.println("----------------------------");
         System.out.println("Ready. What is on your mind?");
@@ -35,7 +38,7 @@ public class Application implements CommandLineRunner {
             if (line.equals("exit")) {
                 return;
             }
-            utteranceProcessor.process(line);
+            conversationEngine.processUtterance(line);
         }
     }
 }
