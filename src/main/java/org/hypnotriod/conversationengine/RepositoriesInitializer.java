@@ -1,9 +1,7 @@
 package org.hypnotriod.conversationengine;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import org.hypnotriod.conversationengine.engine.entity.SpokenQuery;
@@ -36,13 +34,13 @@ public class RepositoriesInitializer {
     @Autowired
     private VechicleRepository vechicleRepository;
 
-    private final Map<String, SpokenContext> spokenContexts = new HashMap<>();
-
     @PostConstruct
     private void init() {
-        spokenQueryService.save(new SpokenQuery("^go to [[:alpha:] ]+ by [[:alpha:] ]+$", "go to [destination.value] by [vehicle.value]", "en-US", "GO_TO_DESTINATION_BY_VECHICLE", mapToSpokenContexts("BASE_CONTEXT")));
-        spokenQueryService.save(new SpokenQuery("^go to [[:alpha:] ]+$", "go to [destination.value]", "en-US", "GO_TO_DESTINATION", mapToSpokenContexts("BASE_CONTEXT")));
-        spokenQueryService.save(new SpokenQuery("^go to [[:alpha:] ]+ right now", "go to [destination.value] right now", "en-US", "GO_TO_DESTINATION_NOW", mapToSpokenContexts("BASE_CONTEXT", "TEST_CONTEXT")));
+        spokenQueryService.save(new SpokenQuery("search for [?]", "en-US", "SEARCH", mapToSpokenContexts("BASE_CONTEXT")));
+        spokenQueryService.save(new SpokenQuery("google for [?]", "en-US", "SEARCH", mapToSpokenContexts("BASE_CONTEXT")));
+        spokenQueryService.save(new SpokenQuery("go to [destination.value] by [vehicle.value]", "en-US", "GO_TO_DESTINATION_BY_VECHICLE", mapToSpokenContexts("BASE_CONTEXT")));
+        spokenQueryService.save(new SpokenQuery("go to [destination.value]", "en-US", "GO_TO_DESTINATION", mapToSpokenContexts("BASE_CONTEXT")));
+        spokenQueryService.save(new SpokenQuery("go to [destination.value] right now", "en-US", "GO_TO_DESTINATION_NOW", mapToSpokenContexts("BASE_CONTEXT", "TEST_CONTEXT")));
 
         destinationRepository.save(new Destination("home"));
         destinationRepository.save(new Destination("work"));
@@ -58,11 +56,11 @@ public class RepositoriesInitializer {
     }
 
     private SpokenContext fetchSpokenContextByName(String contextName) {
-        if (!spokenContexts.containsKey(contextName)) {
-            SpokenContext spokenContext = new SpokenContext(contextName);
+        SpokenContext spokenContext = spokenContextRepository.findByName(contextName);
+        if (spokenContext == null) {
+            spokenContext = new SpokenContext(contextName);
             spokenContextRepository.save(spokenContext);
-            spokenContexts.put(contextName, spokenContext);
         }
-        return spokenContexts.get(contextName);
+        return spokenContext;
     }
 }

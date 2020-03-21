@@ -10,7 +10,7 @@ import lombok.ToString;
  */
 @Getter
 @ToString
-public class RecognizedCustomData {
+public class RecognizedUtteranceCustomData extends RecognizedUtteranceData {
 
     @Getter
     @ToString
@@ -29,7 +29,9 @@ public class RecognizedCustomData {
     private final String tableKey;
     private final List<IdValueMatch> idValueMatches;
 
-    public RecognizedCustomData(String tableName, String tableKey, List<IdValueMatch> idValueMatches) {
+    public RecognizedUtteranceCustomData(String tableName, String tableKey, String value, List<IdValueMatch> idValueMatches) {
+        super(value);
+
         this.tableName = tableName;
         this.tableKey = tableKey;
         this.idValueMatches = idValueMatches;

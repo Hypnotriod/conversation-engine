@@ -2,7 +2,6 @@ package org.hypnotriod.conversationengine.engine.entity;
 
 import java.io.Serializable;
 import java.util.List;
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -12,6 +11,8 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import lombok.Data;
+import static org.hypnotriod.conversationengine.engine.contants.TextManipulationConstants.UTTERANCE_DATA_PATTERN_REGEX;
+import static org.hypnotriod.conversationengine.engine.contants.TextManipulationConstants.SPOKEN_QUERY_DATA_REGEX;
 
 /**
  *
@@ -39,11 +40,15 @@ public class SpokenQuery implements Serializable {
     public SpokenQuery() {
     }
 
-    public SpokenQuery(String regexp, String query, String language, String command, List<SpokenContext> contexts) {
-        this.regexp = regexp;
+    public SpokenQuery(String query, String language, String command, List<SpokenContext> contexts) {
+        this.regexp = buildRegExp(query);
         this.query = query;
         this.language = language;
         this.command = command;
         this.contexts = contexts;
+    }
+
+    private String buildRegExp(String query) {
+        return "^" + query.replaceAll(UTTERANCE_DATA_PATTERN_REGEX, SPOKEN_QUERY_DATA_REGEX) + "$";
     }
 }

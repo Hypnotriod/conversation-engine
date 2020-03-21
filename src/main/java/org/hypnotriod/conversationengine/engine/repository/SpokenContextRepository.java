@@ -11,4 +11,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface SpokenContextRepository extends JpaRepository<SpokenContext, Long> {
 
+    SpokenContext findByName(String name);
 }

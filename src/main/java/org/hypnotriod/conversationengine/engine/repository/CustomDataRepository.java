@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
-import org.hypnotriod.conversationengine.engine.vo.UtteranceCustomData;
+import org.hypnotriod.conversationengine.engine.vo.UtteranceData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -18,7 +18,7 @@ public class CustomDataRepository {
     @Autowired
     EntityManager entityManager;
 
-    public List<Object[]> getAllIdValueMatches(UtteranceCustomData utteranceCustomData) {
+    public List<Object[]> getAllIdValueMatches(UtteranceData utteranceCustomData) {
         List<Object[]> resultList = new ArrayList<>();
         Query query = entityManager.createNativeQuery(
                 buildSelectAllIdValueFromTableWherevalueLikeQuery(utteranceCustomData))
@@ -30,12 +30,12 @@ public class CustomDataRepository {
         return resultList;
     }
 
-    private String buildSelectAllIdValueFromTableWherevalueLikeQuery(UtteranceCustomData utteranceCustomData) {
+    private String buildSelectAllIdValueFromTableWherevalueLikeQuery(UtteranceData utteranceCustomData) {
         return String.format(
                 "SELECT id, %s FROM %s WHERE %s = ?1",
-                utteranceCustomData.getTableKey(),
-                utteranceCustomData.getTableName(),
-                utteranceCustomData.getTableKey()
+                utteranceCustomData.getRepositoryKey(),
+                utteranceCustomData.getRepositoryName(),
+                utteranceCustomData.getRepositoryKey()
         );
     }
 }

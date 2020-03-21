@@ -16,13 +16,13 @@ public class UtteranceRecognitionResult {
     private final String language;
     private final String command;
     private final String context;
-    private final List<RecognizedCustomData> recognizedCustomDatas;
+    private final List<RecognizedUtteranceData> recognizedDatas;
 
-    public UtteranceRecognitionResult(String query, String language, String command, String context, List<RecognizedCustomData> recognizedCustomDatas) {
+    public UtteranceRecognitionResult(String query, String language, String command, String context, List<RecognizedUtteranceData> recognizedDatas) {
         this.query = query;
         this.language = language;
         this.command = command;
         this.context = context;
-        this.recognizedCustomDatas = recognizedCustomDatas;
+        this.recognizedDatas = recognizedDatas;
     }
 }
