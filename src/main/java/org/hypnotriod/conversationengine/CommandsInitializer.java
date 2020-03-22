@@ -10,6 +10,12 @@ import org.springframework.stereotype.Component;
 @Component
 public class CommandsInitializer {
 
+    public static final String CMD_SEARCH = "SEARCH";
+    public static final String CMD_SHOW_SEARCH_HISTORY = "SHOW_SEARCH_HISTORY";
+
     @Autowired
     SearchCommand searchCommand;
+
+    @Autowired
+    ShowSearchHistoryCommand showSearchHistoryCommand;
 }

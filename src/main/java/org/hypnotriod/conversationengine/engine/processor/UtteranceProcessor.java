@@ -1,9 +1,7 @@
-package org.hypnotriod.conversationengine.engine;
+package org.hypnotriod.conversationengine.engine.processor;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import org.hypnotriod.conversationengine.engine.vo.RecognizedUtteranceCustomData;
 import org.hypnotriod.conversationengine.engine.vo.RecognizedUtteranceData;
 import org.hypnotriod.conversationengine.engine.entity.SpokenQuery;
@@ -13,7 +11,6 @@ import org.hypnotriod.conversationengine.engine.service.CustomDataService;
 import org.hypnotriod.conversationengine.engine.service.SpokenQueryService;
 import org.hypnotriod.conversationengine.engine.service.UtteranceDataParserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -22,7 +19,7 @@ import org.springframework.util.StringUtils;
  * @author Ilya Pikin
  */
 @Component
-class UtteranceProcessor {
+public class UtteranceProcessor {
 
     @Autowired
     private CustomDataService customDataService;
@@ -33,34 +30,16 @@ class UtteranceProcessor {
     @Autowired
     private UtteranceDataParserService utteranceDataParserService;
 
-    private final Map<String, UtteranceCommand> utteranceCommands = new HashMap<>();
+    @Autowired
+    private UtteranceCommandProcessor utteranceCommandProcessor;
 
-    public void registerUtteranceCommand(UtteranceCommand command) {
-        UtteranceCommandName commandName = AnnotationUtils.findAnnotation(command.getClass(), UtteranceCommandName.class);
-
-        if (commandName == null) {
-            throw new RuntimeException("Command " + command + " should have @UtteranceCommandName annotation");
-        }
-        if (utteranceCommands.containsKey(commandName.value())) {
-            throw new RuntimeException("Command with " + commandName.value() + " already duplicated");
-        }
-        utteranceCommands.put(commandName.value(), command);
-    }
-
-    public void process(String utterance, String context) {
+    public boolean process(String utterance, String context) {
         utterance = prepareUtterance(utterance);
 
         List<SpokenQuery> matchedSpokenQuerys = spokenQueryService.findAllMathces(utterance, context);
         List<UtteranceRecognitionResult> utteranceRecognitionResults = processSpokenQueries(matchedSpokenQuerys, utterance, context);
 
-        for (UtteranceRecognitionResult utteranceRecognitionResult : utteranceRecognitionResults) {
-            UtteranceCommand command = utteranceCommands.get(utteranceRecognitionResult.getCommand());
-            if (command != null && command.execute(utteranceRecognitionResult) == true) {
-                break;
-            } else {
-                System.out.println(utteranceRecognitionResults.toString());
-            }
-        }
+        return utteranceCommandProcessor.processUtteranceRecognitionResults(utteranceRecognitionResults);
     }
 
     private String prepareUtterance(String utterance) {

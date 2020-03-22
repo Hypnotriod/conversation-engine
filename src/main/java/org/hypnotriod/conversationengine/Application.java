@@ -38,7 +38,9 @@ public class Application implements CommandLineRunner {
             if (line.equals("exit")) {
                 return;
             }
-            conversationEngine.processUtterance(line);
+            if (!conversationEngine.processUtterance(line)) {
+                System.out.println("Command not recognized");
+            }
         }
     }
 }

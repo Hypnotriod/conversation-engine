@@ -1,5 +1,6 @@
 package org.hypnotriod.conversationengine.engine;
 
+import org.hypnotriod.conversationengine.engine.processor.UtteranceProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -10,17 +11,18 @@ import org.springframework.stereotype.Component;
 @Component
 public class ConversationEngine {
 
-    @Autowired
-    private DialogState dialogState;
+    public static String BASE_CONTEXT = "BASE_CONTEXT";
 
     @Autowired
     private UtteranceProcessor utteranceProcessor;
 
-    public void processUtterance(String utterance) {
-        utteranceProcessor.process(utterance, dialogState.getContext());
+    private String context = BASE_CONTEXT;
+
+    public boolean processUtterance(String utterance) {
+        return utteranceProcessor.process(utterance, context);
     }
 
     public void changeContext(String context) {
-        dialogState.setContext(context);
+        this.context = context;
     }
 }

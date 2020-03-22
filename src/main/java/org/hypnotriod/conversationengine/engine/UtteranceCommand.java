@@ -1,8 +1,11 @@
 package org.hypnotriod.conversationengine.engine;
 
+import org.hypnotriod.conversationengine.engine.processor.UtteranceCommandProcessor;
+import com.google.inject.internal.util.ImmutableList;
 import javax.annotation.PostConstruct;
 import org.hypnotriod.conversationengine.engine.vo.UtteranceRecognitionResult;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.AnnotationUtils;
 
 /**
  *
@@ -11,12 +14,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 public abstract class UtteranceCommand {
 
     @Autowired
-    private UtteranceProcessor utteranceProcessor;
+    private UtteranceCommandProcessor utteranceCommandProcessor;
 
     @PostConstruct
     private void register() {
-        utteranceProcessor.registerUtteranceCommand(this);
+        utteranceCommandProcessor.registerUtteranceCommand(this);
     }
 
-    abstract public boolean execute(UtteranceRecognitionResult utteranceRecognitionResult);
+    public String getName() {
+        UtteranceCommandName commandName = AnnotationUtils.findAnnotation(this.getClass(), UtteranceCommandName.class);
+
+        if (commandName == null || commandName.value().isEmpty()) {
+            throw new RuntimeException("Command " + this + " should have @UtteranceCommandName annotation with proper name");
+        }
+
+        return commandName.value();
+    }
+
+    abstract public boolean execute(
+            final UtteranceRecognitionResult utteranceRecognitionResult,
+            final ImmutableList<UtteranceRecognitionResult> utteranceRecognitionResultsHistory);
 }
