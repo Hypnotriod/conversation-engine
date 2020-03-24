@@ -5,7 +5,9 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import org.hypnotriod.conversationengine.engine.UtteranceCommand;
+import org.hypnotriod.conversationengine.engine.command.UtteranceCommand;
+import org.hypnotriod.conversationengine.engine.vo.ExecutionResult;
+import org.hypnotriod.conversationengine.engine.vo.UtteranceCommandResult;
 import org.hypnotriod.conversationengine.engine.vo.UtteranceRecognitionResult;
 import org.springframework.stereotype.Component;
 
@@ -29,19 +31,22 @@ public class UtteranceCommandProcessor {
         utteranceCommands.put(commandName, command);
     }
 
-    public boolean processUtteranceRecognitionResults(List<UtteranceRecognitionResult> utteranceRecognitionResults) {
+    public UtteranceCommandResult processUtteranceRecognitionResults(List<UtteranceRecognitionResult> utteranceRecognitionResults) {
         for (UtteranceRecognitionResult utteranceRecognitionResult : utteranceRecognitionResults) {
             UtteranceCommand command = utteranceCommands.get(utteranceRecognitionResult.getCommand());
-            if (command != null && command.execute(
-                    utteranceRecognitionResult, ImmutableList.copyOf(utteranceRecognitionResultsHistory))) {
-                storeUtteranceRecognitionResult(utteranceRecognitionResult);
-                return true;
+            if (command != null) {
+                UtteranceCommandResult commandResult
+                        = command.execute(utteranceRecognitionResult, ImmutableList.copyOf(utteranceRecognitionResultsHistory));
+                if (commandResult.getResult() == ExecutionResult.SUCCEED) {
+                    storeSuccessedUtteranceRecognitionResult(utteranceRecognitionResult);
+                }
+                return commandResult;
             }
         }
-        return false;
+        return new UtteranceCommandResult(ExecutionResult.REJECTED);
     }
 
-    private void storeUtteranceRecognitionResult(UtteranceRecognitionResult utteranceRecognitionResult) {
+    private void storeSuccessedUtteranceRecognitionResult(UtteranceRecognitionResult utteranceRecognitionResult) {
         utteranceRecognitionResultsHistory.add(utteranceRecognitionResult);
         if (utteranceRecognitionResultsHistory.size() > RECOGNITION_RESULT_HISTORY_SIZE_MAX) {
             utteranceRecognitionResultsHistory.remove(0);

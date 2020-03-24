@@ -29,8 +29,8 @@ public class RecognizedUtteranceCustomData extends RecognizedUtteranceData {
     private final String tableKey;
     private final List<IdValueMatch> idValueMatches;
 
-    public RecognizedUtteranceCustomData(String tableName, String tableKey, String value, List<IdValueMatch> idValueMatches) {
-        super(value);
+    public RecognizedUtteranceCustomData(String key, String value, String tableName, String tableKey, List<IdValueMatch> idValueMatches) {
+        super(key, value);
 
         this.tableName = tableName;
         this.tableKey = tableKey;

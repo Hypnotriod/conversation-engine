@@ -1,6 +1,7 @@
 package org.hypnotriod.conversationengine.engine;
 
 import org.hypnotriod.conversationengine.engine.processor.UtteranceProcessor;
+import org.hypnotriod.conversationengine.engine.vo.UtteranceCommandResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -18,7 +19,7 @@ public class ConversationEngine {
 
     private String context = BASE_CONTEXT;
 
-    public boolean processUtterance(String utterance) {
+    public UtteranceCommandResult processUtterance(String utterance) {
         return utteranceProcessor.process(utterance, context);
     }
 

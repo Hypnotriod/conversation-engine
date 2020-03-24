@@ -53,14 +53,19 @@ public class UtteranceDataParserService {
 
     private UtteranceData parseUtteranceData(String dataPattern, String utteranceData) {
         String trimmedPattern = dataPattern.substring(1, dataPattern.length() - 1);
-        if (trimmedPattern.contains("?")) {
-            return new UtteranceData(utteranceData);
-        } else {
-            String[] repositoryNameKey = trimmedPattern.split("\\.");
-            String repositoryName = repositoryNameKey[0];
-            String repositoryKey = repositoryNameKey[1];
 
-            return new UtteranceData(repositoryName, repositoryKey, utteranceData);
+        if (trimmedPattern.contains("?")) {
+            String[] patternParams = trimmedPattern.split(":");
+            String utteranceDataKey = patternParams[0];
+
+            return new UtteranceData(utteranceDataKey, utteranceData);
+        } else {
+            String[] patternParams = trimmedPattern.split(":|\\.");
+            String utteranceDataKey = patternParams[0];
+            String repositoryName = patternParams[1];
+            String repositoryKey = patternParams[2];
+
+            return new UtteranceData(utteranceDataKey, utteranceData, repositoryName, repositoryKey);
         }
     }
 }

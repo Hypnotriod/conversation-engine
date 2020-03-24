@@ -1,8 +1,11 @@
-package org.hypnotriod.conversationengine.engine;
+package org.hypnotriod.conversationengine.engine.command;
 
 import org.hypnotriod.conversationengine.engine.processor.UtteranceCommandProcessor;
 import com.google.inject.internal.util.ImmutableList;
 import javax.annotation.PostConstruct;
+import org.hypnotriod.conversationengine.engine.annotation.Command;
+import org.hypnotriod.conversationengine.engine.vo.ExecutionResult;
+import org.hypnotriod.conversationengine.engine.vo.UtteranceCommandResult;
 import org.hypnotriod.conversationengine.engine.vo.UtteranceRecognitionResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.AnnotationUtils;
@@ -22,7 +25,7 @@ public abstract class UtteranceCommand {
     }
 
     public String getName() {
-        UtteranceCommandName commandName = AnnotationUtils.findAnnotation(this.getClass(), UtteranceCommandName.class);
+        Command commandName = AnnotationUtils.findAnnotation(this.getClass(), Command.class);
 
         if (commandName == null || commandName.value().isEmpty()) {
             throw new RuntimeException("Command " + this + " should have @UtteranceCommandName annotation with proper name");
@@ -31,7 +34,11 @@ public abstract class UtteranceCommand {
         return commandName.value();
     }
 
-    abstract public boolean execute(
+    protected UtteranceCommandResult createResult(ExecutionResult executionResult) {
+        return new UtteranceCommandResult(executionResult);
+    }
+
+    abstract public UtteranceCommandResult execute(
             final UtteranceRecognitionResult utteranceRecognitionResult,
             final ImmutableList<UtteranceRecognitionResult> utteranceRecognitionResultsHistory);
 }

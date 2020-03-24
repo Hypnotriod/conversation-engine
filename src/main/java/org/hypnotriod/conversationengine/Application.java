@@ -3,6 +3,7 @@ package org.hypnotriod.conversationengine;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import org.hypnotriod.conversationengine.engine.ConversationEngine;
+import org.hypnotriod.conversationengine.engine.vo.ExecutionResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -38,7 +39,7 @@ public class Application implements CommandLineRunner {
             if (line.equals("exit")) {
                 return;
             }
-            if (!conversationEngine.processUtterance(line)) {
+            if (conversationEngine.processUtterance(line).getResult() != ExecutionResult.SUCCEED) {
                 System.out.println("Command not recognized");
             }
         }

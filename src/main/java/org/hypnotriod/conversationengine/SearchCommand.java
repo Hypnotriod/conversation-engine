@@ -5,25 +5,25 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import static org.hypnotriod.conversationengine.CommandsInitializer.CMD_SEARCH;
-import org.hypnotriod.conversationengine.engine.UtteranceCommand;
+import org.hypnotriod.conversationengine.engine.command.UtteranceCommand;
 import org.hypnotriod.conversationengine.engine.vo.UtteranceRecognitionResult;
-import org.springframework.stereotype.Component;
-import org.hypnotriod.conversationengine.engine.UtteranceCommandName;
+import org.hypnotriod.conversationengine.engine.annotation.Command;
+import org.hypnotriod.conversationengine.engine.vo.ExecutionResult;
+import org.hypnotriod.conversationengine.engine.vo.UtteranceCommandResult;
 
 /**
  *
  * @author Ilya Pikin
  */
-@Component
-@UtteranceCommandName(CMD_SEARCH)
+@Command(CMD_SEARCH)
 public class SearchCommand extends UtteranceCommand {
 
     @Override
-    public boolean execute(
+    public UtteranceCommandResult execute(
             final UtteranceRecognitionResult utteranceRecognitionResult,
             final ImmutableList<UtteranceRecognitionResult> utteranceRecognitionResultsHistory) {
 
-        String searchFor = utteranceRecognitionResult.getRecognizedDatas().get(0).getValue();
+        String searchFor = utteranceRecognitionResult.getRecognizedDatas().get("request").getValue();
 
         System.out.println("Searching for " + searchFor);
 
@@ -35,7 +35,7 @@ public class SearchCommand extends UtteranceCommand {
             Logger.getLogger(SearchCommand.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        return true;
+        return createResult(ExecutionResult.SUCCEED);
     }
 
 }

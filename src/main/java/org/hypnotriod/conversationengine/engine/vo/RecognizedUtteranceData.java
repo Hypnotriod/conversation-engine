@@ -11,9 +11,11 @@ import lombok.ToString;
 @ToString
 public class RecognizedUtteranceData {
 
+    private final String key;
     private final String value;
 
-    public RecognizedUtteranceData(String value) {
+    public RecognizedUtteranceData(String key, String value) {
+        this.key = key;
         this.value = value;
     }
 }

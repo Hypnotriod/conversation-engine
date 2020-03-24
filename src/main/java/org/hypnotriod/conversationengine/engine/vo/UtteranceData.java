@@ -13,17 +13,20 @@ public class UtteranceData {
 
     private final String repositoryName;
     private final String repositoryKey;
+    private final String key;
     private final String value;
 
-    public UtteranceData(String repositoryName, String repositoryKey, String value) {
+    public UtteranceData(String key, String value, String repositoryName, String repositoryKey) {
+        this.key = key;
+        this.value = value;
         this.repositoryName = repositoryName;
         this.repositoryKey = repositoryKey;
-        this.value = value;
     }
 
-    public UtteranceData(String value) {
+    public UtteranceData(String key, String value) {
+        this.key = key;
+        this.value = value;
         this.repositoryName = null;
         this.repositoryKey = null;
-        this.value = value;
     }
 }

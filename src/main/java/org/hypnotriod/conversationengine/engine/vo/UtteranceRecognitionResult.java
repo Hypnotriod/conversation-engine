@@ -1,6 +1,6 @@
 package org.hypnotriod.conversationengine.engine.vo;
 
-import java.util.List;
+import java.util.Map;
 import lombok.Getter;
 import lombok.ToString;
 
@@ -16,9 +16,9 @@ public class UtteranceRecognitionResult {
     private final String language;
     private final String command;
     private final String context;
-    private final List<RecognizedUtteranceData> recognizedDatas;
+    private final Map<String, RecognizedUtteranceData> recognizedDatas;
 
-    public UtteranceRecognitionResult(String query, String language, String command, String context, List<RecognizedUtteranceData> recognizedDatas) {
+    public UtteranceRecognitionResult(String query, String language, String command, String context, Map<String, RecognizedUtteranceData> recognizedDatas) {
         this.query = query;
         this.language = language;
         this.command = command;

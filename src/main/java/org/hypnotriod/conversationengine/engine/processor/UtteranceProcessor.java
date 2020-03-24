@@ -1,7 +1,9 @@
 package org.hypnotriod.conversationengine.engine.processor;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.hypnotriod.conversationengine.engine.vo.RecognizedUtteranceCustomData;
 import org.hypnotriod.conversationengine.engine.vo.RecognizedUtteranceData;
 import org.hypnotriod.conversationengine.engine.entity.SpokenQuery;
@@ -10,6 +12,7 @@ import org.hypnotriod.conversationengine.engine.vo.UtteranceRecognitionResult;
 import org.hypnotriod.conversationengine.engine.service.CustomDataService;
 import org.hypnotriod.conversationengine.engine.service.SpokenQueryService;
 import org.hypnotriod.conversationengine.engine.service.UtteranceDataParserService;
+import org.hypnotriod.conversationengine.engine.vo.UtteranceCommandResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -33,7 +36,7 @@ public class UtteranceProcessor {
     @Autowired
     private UtteranceCommandProcessor utteranceCommandProcessor;
 
-    public boolean process(String utterance, String context) {
+    public UtteranceCommandResult process(String utterance, String context) {
         utterance = prepareUtterance(utterance);
 
         List<SpokenQuery> matchedSpokenQuerys = spokenQueryService.findAllMathces(utterance, context);
@@ -61,21 +64,26 @@ public class UtteranceProcessor {
     }
 
     private UtteranceRecognitionResult proceesSpokenQueryDatas(List<UtteranceData> utteranceDatas, SpokenQuery spokenQuery, String context) {
-        List<RecognizedUtteranceData> recognizedUtteranceDatas = new ArrayList<>();
+        Map<String, RecognizedUtteranceData> recognizedUtteranceDatas = new HashMap<>();
 
         utteranceDatas.forEach((utteranceData) -> {
             if (utteranceData.getRepositoryKey() != null && utteranceData.getRepositoryName() != null) {
                 List<RecognizedUtteranceCustomData.IdValueMatch> idValueMatches = customDataService.getAllIdValueMatches(utteranceData);
 
                 if (!idValueMatches.isEmpty()) {
-                    recognizedUtteranceDatas.add(new RecognizedUtteranceCustomData(
-                            utteranceData.getRepositoryName(),
-                            utteranceData.getRepositoryKey(),
-                            utteranceData.getValue(),
-                            idValueMatches));
+                    recognizedUtteranceDatas.put(
+                            utteranceData.getKey(),
+                            new RecognizedUtteranceCustomData(
+                                    utteranceData.getKey(),
+                                    utteranceData.getValue(),
+                                    utteranceData.getRepositoryName(),
+                                    utteranceData.getRepositoryKey(),
+                                    idValueMatches));
                 }
             } else {
-                recognizedUtteranceDatas.add(new RecognizedUtteranceData(utteranceData.getValue()));
+                recognizedUtteranceDatas.put(
+                        utteranceData.getKey(),
+                        new RecognizedUtteranceData(utteranceData.getKey(), utteranceData.getValue()));
             }
         });
 
