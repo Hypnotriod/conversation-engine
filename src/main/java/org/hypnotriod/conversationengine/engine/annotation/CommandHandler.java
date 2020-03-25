@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 @Component
 @Target(value = {ElementType.TYPE})
 @Retention(value = RetentionPolicy.RUNTIME)
-public @interface Command {
+public @interface CommandHandler {
 
     public String value() default "";
 }

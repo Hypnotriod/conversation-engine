@@ -5,21 +5,21 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import static org.hypnotriod.conversationengine.CommandsInitializer.CMD_SEARCH;
-import org.hypnotriod.conversationengine.engine.command.UtteranceCommand;
+import org.hypnotriod.conversationengine.engine.commandhandler.UtteranceCommandHandler;
 import org.hypnotriod.conversationengine.engine.vo.UtteranceRecognitionResult;
-import org.hypnotriod.conversationengine.engine.annotation.Command;
-import org.hypnotriod.conversationengine.engine.vo.ExecutionResult;
-import org.hypnotriod.conversationengine.engine.vo.UtteranceCommandResult;
+import org.hypnotriod.conversationengine.engine.vo.CommandHandlerResult;
+import org.hypnotriod.conversationengine.engine.vo.UtteranceCommandHandlerResult;
+import org.hypnotriod.conversationengine.engine.annotation.CommandHandler;
 
 /**
  *
  * @author Ilya Pikin
  */
-@Command(CMD_SEARCH)
-public class SearchCommand extends UtteranceCommand {
+@CommandHandler(CMD_SEARCH)
+public class SearchCommandHandler extends UtteranceCommandHandler {
 
     @Override
-    public UtteranceCommandResult execute(
+    public UtteranceCommandHandlerResult handle(
             final UtteranceRecognitionResult utteranceRecognitionResult,
             final ImmutableList<UtteranceRecognitionResult> utteranceRecognitionResultsHistory) {
 
@@ -32,10 +32,9 @@ public class SearchCommand extends UtteranceCommand {
             processBuilder.command("\"C:/Program Files (x86)/Google/Chrome/Application/chrome.exe\"", "https://www.google.com/search?q=" + searchFor.replaceAll(" ", "%20"));
             processBuilder.start();
         } catch (IOException ex) {
-            Logger.getLogger(SearchCommand.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(SearchCommandHandler.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        return createResult(ExecutionResult.SUCCEED);
+        return createResult(CommandHandlerResult.SUCCEED);
     }
-
 }

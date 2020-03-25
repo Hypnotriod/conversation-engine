@@ -5,21 +5,21 @@ import java.util.List;
 import java.util.stream.Collectors;
 import static org.hypnotriod.conversationengine.CommandsInitializer.CMD_SHOW_SEARCH_HISTORY;
 import static org.hypnotriod.conversationengine.CommandsInitializer.CMD_SEARCH;
-import org.hypnotriod.conversationengine.engine.command.UtteranceCommand;
+import org.hypnotriod.conversationengine.engine.commandhandler.UtteranceCommandHandler;
 import org.hypnotriod.conversationengine.engine.vo.UtteranceRecognitionResult;
-import org.hypnotriod.conversationengine.engine.annotation.Command;
-import org.hypnotriod.conversationengine.engine.vo.ExecutionResult;
-import org.hypnotriod.conversationengine.engine.vo.UtteranceCommandResult;
+import org.hypnotriod.conversationengine.engine.vo.CommandHandlerResult;
+import org.hypnotriod.conversationengine.engine.vo.UtteranceCommandHandlerResult;
+import org.hypnotriod.conversationengine.engine.annotation.CommandHandler;
 
 /**
  *
  * @author Ilya Pikin
  */
-@Command(CMD_SHOW_SEARCH_HISTORY)
-public class ShowSearchHistoryCommand extends UtteranceCommand {
+@CommandHandler(CMD_SHOW_SEARCH_HISTORY)
+public class ShowSearchHistoryCommandHandler extends UtteranceCommandHandler {
 
     @Override
-    public UtteranceCommandResult execute(
+    public UtteranceCommandHandlerResult handle(
             UtteranceRecognitionResult utteranceRecognitionResult,
             ImmutableList<UtteranceRecognitionResult> utteranceRecognitionResultsHistory) {
 
@@ -34,6 +34,6 @@ public class ShowSearchHistoryCommand extends UtteranceCommand {
             System.out.println("No search history found");
         }
 
-        return createResult(ExecutionResult.SUCCEED);
+        return createResult(CommandHandlerResult.SUCCEED);
     }
 }

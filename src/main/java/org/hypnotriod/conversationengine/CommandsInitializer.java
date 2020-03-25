@@ -14,8 +14,8 @@ public class CommandsInitializer {
     public static final String CMD_SHOW_SEARCH_HISTORY = "SHOW_SEARCH_HISTORY";
 
     @Autowired
-    SearchCommand searchCommand;
+    SearchCommandHandler searchCommandHandler;
 
     @Autowired
-    ShowSearchHistoryCommand showSearchHistoryCommand;
+    ShowSearchHistoryCommandHandler showSearchHistoryCommandHandler;
 }

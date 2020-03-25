@@ -12,28 +12,15 @@ import lombok.ToString;
 @ToString
 public class RecognizedUtteranceCustomData extends RecognizedUtteranceData {
 
-    @Getter
-    @ToString
-    public static final class IdValueMatch {
+    private final String repositoryName;
+    private final String repositoryKey;
+    private final List<CustomDataMatch> customDataMatches;
 
-        private final Long id;
-        private final String value;
-
-        public IdValueMatch(Long id, String value) {
-            this.id = id;
-            this.value = value;
-        }
-    }
-
-    private final String tableName;
-    private final String tableKey;
-    private final List<IdValueMatch> idValueMatches;
-
-    public RecognizedUtteranceCustomData(String key, String value, String tableName, String tableKey, List<IdValueMatch> idValueMatches) {
+    public RecognizedUtteranceCustomData(String key, String value, String repositoryName, String repositoryKey, List<CustomDataMatch> customDataMatches) {
         super(key, value);
 
-        this.tableName = tableName;
-        this.tableKey = tableKey;
-        this.idValueMatches = idValueMatches;
+        this.repositoryName = repositoryName;
+        this.repositoryKey = repositoryKey;
+        this.customDataMatches = customDataMatches;
     }
 }

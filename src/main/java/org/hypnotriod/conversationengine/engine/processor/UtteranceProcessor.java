@@ -12,7 +12,8 @@ import org.hypnotriod.conversationengine.engine.vo.UtteranceRecognitionResult;
 import org.hypnotriod.conversationengine.engine.service.CustomDataService;
 import org.hypnotriod.conversationengine.engine.service.SpokenQueryService;
 import org.hypnotriod.conversationengine.engine.service.UtteranceDataParserService;
-import org.hypnotriod.conversationengine.engine.vo.UtteranceCommandResult;
+import org.hypnotriod.conversationengine.engine.vo.CustomDataMatch;
+import org.hypnotriod.conversationengine.engine.vo.UtteranceCommandHandlerResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -36,7 +37,7 @@ public class UtteranceProcessor {
     @Autowired
     private UtteranceCommandProcessor utteranceCommandProcessor;
 
-    public UtteranceCommandResult process(String utterance, String context) {
+    public UtteranceCommandHandlerResult process(String utterance, String context) {
         utterance = prepareUtterance(utterance);
 
         List<SpokenQuery> matchedSpokenQuerys = spokenQueryService.findAllMathces(utterance, context);
@@ -68,9 +69,9 @@ public class UtteranceProcessor {
 
         utteranceDatas.forEach((utteranceData) -> {
             if (utteranceData.getRepositoryKey() != null && utteranceData.getRepositoryName() != null) {
-                List<RecognizedUtteranceCustomData.IdValueMatch> idValueMatches = customDataService.getAllIdValueMatches(utteranceData);
+                List<CustomDataMatch> customDataMatches = customDataService.getAllMatches(utteranceData);
 
-                if (!idValueMatches.isEmpty()) {
+                if (!customDataMatches.isEmpty()) {
                     recognizedUtteranceDatas.put(
                             utteranceData.getKey(),
                             new RecognizedUtteranceCustomData(
@@ -78,7 +79,7 @@ public class UtteranceProcessor {
                                     utteranceData.getValue(),
                                     utteranceData.getRepositoryName(),
                                     utteranceData.getRepositoryKey(),
-                                    idValueMatches));
+                                    customDataMatches));
                 }
             } else {
                 recognizedUtteranceDatas.put(

@@ -9,11 +9,11 @@ import lombok.ToString;
  */
 @Getter
 @ToString
-public class UtteranceCommandResult {
+public class UtteranceCommandHandlerResult {
 
-    private final ExecutionResult result;
+    private final CommandHandlerResult result;
 
-    public UtteranceCommandResult(ExecutionResult result) {
+    public UtteranceCommandHandlerResult(CommandHandlerResult result) {
         this.result = result;
     }
 }

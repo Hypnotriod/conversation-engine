@@ -1,12 +1,13 @@
 package org.hypnotriod.conversationengine.engine.repository;
 
+import static org.hypnotriod.conversationengine.engine.contants.QueryConstants.QUERY_CUSTOM_DATA_ID_VALUE_MATCHES;
+import org.hypnotriod.conversationengine.engine.vo.UtteranceData;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
-import org.hypnotriod.conversationengine.engine.vo.UtteranceData;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
 
 /**
  *
@@ -32,7 +33,7 @@ public class CustomDataRepository {
 
     private String buildSelectAllIdValueFromTableWherevalueLikeQuery(UtteranceData utteranceCustomData) {
         return String.format(
-                "SELECT id, %s FROM %s WHERE %s = ?1",
+                QUERY_CUSTOM_DATA_ID_VALUE_MATCHES,
                 utteranceCustomData.getRepositoryKey(),
                 utteranceCustomData.getRepositoryName(),
                 utteranceCustomData.getRepositoryKey()

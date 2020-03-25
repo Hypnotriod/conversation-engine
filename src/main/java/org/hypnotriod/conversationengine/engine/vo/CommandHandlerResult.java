@@ -4,13 +4,14 @@ package org.hypnotriod.conversationengine.engine.vo;
  *
  * @author Ilya Pikin
  */
-public enum ExecutionResult {
+public enum CommandHandlerResult {
+    UNHANDLED("UNHANDLED"),
     REJECTED("REJECTED"),
     SUCCEED("SUCCEED");
 
     private final String value;
 
-    ExecutionResult(String name) {
+    CommandHandlerResult(String name) {
         this.value = name;
     }
 
