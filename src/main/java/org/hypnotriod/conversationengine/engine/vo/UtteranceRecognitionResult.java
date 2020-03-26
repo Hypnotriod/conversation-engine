@@ -1,6 +1,7 @@
 package org.hypnotriod.conversationengine.engine.vo;
 
 import java.util.Map;
+import java.util.Optional;
 import lombok.Getter;
 import lombok.ToString;
 
@@ -31,11 +32,7 @@ public class UtteranceRecognitionResult {
     }
 
     public RecognizedUtteranceCustomData fetchRecognizedUtteranceCustomData(String key) {
-        RecognizedUtteranceCustomData result = null;
-        RecognizedUtteranceData recognizedUtteranceData = recognizedDatas.get(key);
-        if (recognizedUtteranceData.getClass() == RecognizedUtteranceCustomData.class) {
-            result = (RecognizedUtteranceCustomData) recognizedUtteranceData;
-        }
-        return result;
+        return (RecognizedUtteranceCustomData) Optional.ofNullable(recognizedDatas.get(key))
+                .filter(value -> value instanceof RecognizedUtteranceCustomData).orElse(null);
     }
 }
