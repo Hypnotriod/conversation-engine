@@ -27,9 +27,9 @@ public class CustomDataService {
     private List<CustomDataMatch> convertToCustomDataMathes(List<Object[]> idValueMatches, UtteranceData utteranceData) {
         return idValueMatches.stream()
                 .map(idValue -> new CustomDataMatch(
-                        ((BigInteger) idValue[0]).longValue(),
-                        (String) idValue[1],
-                        utteranceData.getValue().equals(idValue[1])))
+                    ((BigInteger) idValue[0]).longValue(),
+                    (String) idValue[1],
+                    utteranceData.getValue().equals(idValue[1])))
                 .collect(Collectors.toList());
     }
 }

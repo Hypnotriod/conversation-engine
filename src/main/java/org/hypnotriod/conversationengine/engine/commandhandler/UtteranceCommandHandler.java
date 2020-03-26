@@ -56,6 +56,14 @@ public abstract class UtteranceCommandHandler {
         return new UtteranceCommandHandlerResult(executionResult);
     }
 
+    protected UtteranceCommandHandlerResult createSuccedResult() {
+        return new UtteranceCommandHandlerResult(CommandHandlerResult.SUCCEED);
+    }
+
+    protected UtteranceCommandHandlerResult createRejectedResult() {
+        return new UtteranceCommandHandlerResult(CommandHandlerResult.REJECTED);
+    }
+
     abstract public UtteranceCommandHandlerResult handle(
             final UtteranceRecognitionResult utteranceRecognitionResult,
             final ImmutableList<UtteranceRecognitionResult> utteranceRecognitionResultsHistory);

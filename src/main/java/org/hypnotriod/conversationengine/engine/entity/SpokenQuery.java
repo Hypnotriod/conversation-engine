@@ -11,8 +11,8 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import lombok.Data;
-import static org.hypnotriod.conversationengine.engine.contants.TextManipulationConstants.UTTERANCE_DATA_PATTERN_REGEX;
-import static org.hypnotriod.conversationengine.engine.contants.TextManipulationConstants.SPOKEN_QUERY_DATA_REGEX;
+import static org.hypnotriod.conversationengine.engine.contants.TextManipulationConstants.REGEX_SPOKEN_QUERY_DATA;
+import static org.hypnotriod.conversationengine.engine.contants.TextManipulationConstants.REGEX_UTTERANCE_DATA;
 
 /**
  *
@@ -49,6 +49,6 @@ public class SpokenQuery implements Serializable {
     }
 
     private String buildRegExp(String query) {
-        return "^" + query.replaceAll(UTTERANCE_DATA_PATTERN_REGEX, SPOKEN_QUERY_DATA_REGEX) + "$";
+        return "^" + query.replaceAll(REGEX_UTTERANCE_DATA, REGEX_SPOKEN_QUERY_DATA) + "$";
     }
 }

@@ -49,6 +49,7 @@ public class RepositoriesInitializer {
 
         vechicleRepository.save(new Vehicle("car"));
         vechicleRepository.save(new Vehicle("bus"));
+        vechicleRepository.save(new Vehicle("several words test"));
     }
 
     private List<SpokenContext> mapToSpokenContexts(String... contextNames) {

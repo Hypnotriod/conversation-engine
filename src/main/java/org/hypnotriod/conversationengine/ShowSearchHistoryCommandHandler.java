@@ -8,7 +8,6 @@ import static org.hypnotriod.conversationengine.CommandsInitializer.CMD_SEARCH;
 import static org.hypnotriod.conversationengine.CommandsInitializer.CONTEXT_BASE;
 import org.hypnotriod.conversationengine.engine.commandhandler.UtteranceCommandHandler;
 import org.hypnotriod.conversationengine.engine.vo.UtteranceRecognitionResult;
-import org.hypnotriod.conversationengine.engine.vo.CommandHandlerResult;
 import org.hypnotriod.conversationengine.engine.vo.UtteranceCommandHandlerResult;
 import org.hypnotriod.conversationengine.engine.annotation.CommandHandler;
 
@@ -35,6 +34,6 @@ public class ShowSearchHistoryCommandHandler extends UtteranceCommandHandler {
             System.out.println("No search history found");
         }
 
-        return createResult(CommandHandlerResult.SUCCEED);
+        return createSuccedResult();
     }
 }
