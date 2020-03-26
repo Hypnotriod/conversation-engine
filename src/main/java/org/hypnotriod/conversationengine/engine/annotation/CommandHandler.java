@@ -16,4 +16,6 @@ import org.springframework.stereotype.Component;
 public @interface CommandHandler {
 
     public String value() default "";
+
+    public String[] contexts() default {};
 }

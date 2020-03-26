@@ -25,4 +25,17 @@ public class UtteranceRecognitionResult {
         this.context = context;
         this.recognizedDatas = recognizedDatas;
     }
+
+    public RecognizedUtteranceData fetchRecognizedUtteranceData(String key) {
+        return recognizedDatas.get(key);
+    }
+
+    public RecognizedUtteranceCustomData fetchRecognizedUtteranceCustomData(String key) {
+        RecognizedUtteranceCustomData result = null;
+        RecognizedUtteranceData recognizedUtteranceData = recognizedDatas.get(key);
+        if (recognizedUtteranceData.getClass() == RecognizedUtteranceCustomData.class) {
+            result = (RecognizedUtteranceCustomData) recognizedUtteranceData;
+        }
+        return result;
+    }
 }

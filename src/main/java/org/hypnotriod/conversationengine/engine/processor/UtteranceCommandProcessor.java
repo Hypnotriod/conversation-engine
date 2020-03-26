@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import org.hypnotriod.conversationengine.engine.commandhandler.UtteranceCommandHandler;
 import org.hypnotriod.conversationengine.engine.vo.CommandHandlerResult;
 import org.hypnotriod.conversationengine.engine.vo.UtteranceCommandHandlerResult;
@@ -20,40 +21,51 @@ public class UtteranceCommandProcessor {
 
     private static final int RECOGNITION_RESULT_HISTORY_SIZE_MAX = 500;
 
-    private final Map<String, UtteranceCommandHandler> utteranceCommandHandlers = new HashMap<>();
+    private final Map<String, Map<String, UtteranceCommandHandler>> utteranceCommandHandlers = new HashMap<>();
     private final List<UtteranceRecognitionResult> utteranceRecognitionResultsHistory = new LinkedList<>();
 
     public void registerUtteranceCommand(UtteranceCommandHandler command) {
         String commandName = command.getName();
-        if (utteranceCommandHandlers.containsKey(commandName)) {
-            throw new RuntimeException("Duplicated command " + command + " with name " + commandName);
+        String[] commandContexts = command.getContexts();
+
+        for (String commandContext : commandContexts) {
+            if (!utteranceCommandHandlers.containsKey(commandContext)) {
+                utteranceCommandHandlers.put(commandContext, new HashMap<>());
+            }
+            Map<String, UtteranceCommandHandler> utteranceCommandHandlersForContext = utteranceCommandHandlers.get(commandContext);
+            if (utteranceCommandHandlersForContext.containsKey(commandName)) {
+                throw new RuntimeException("Command with same name " + commandName + ", and context " + commandContext + " already exists!");
+            }
+            utteranceCommandHandlersForContext.put(commandName, command);
         }
-        utteranceCommandHandlers.put(commandName, command);
     }
 
     public UtteranceCommandHandlerResult processUtteranceRecognitionResults(List<UtteranceRecognitionResult> utteranceRecognitionResults) {
         for (UtteranceRecognitionResult utteranceRecognitionResult : utteranceRecognitionResults) {
-            UtteranceCommandHandler command = utteranceCommandHandlers.get(utteranceRecognitionResult.getCommand());
-            if (command != null) {
+            Optional<UtteranceCommandHandler> command = Optional.ofNullable(
+                    utteranceCommandHandlers.get(utteranceRecognitionResult.getContext()))
+                    .map(values -> values.get(utteranceRecognitionResult.getCommand()));
+
+            if (command.isPresent()) {
                 UtteranceCommandHandlerResult commandResult
-                        = command.handle(utteranceRecognitionResult, ImmutableList.copyOf(utteranceRecognitionResultsHistory));
+                        = command.get().handle(utteranceRecognitionResult, ImmutableList.copyOf(utteranceRecognitionResultsHistory));
                 if (commandResult.getResult() == CommandHandlerResult.SUCCEED) {
-                    storeSuccessedUtteranceRecognitionResult(utteranceRecognitionResult);
+                    storeUtteranceRecognitionResult(utteranceRecognitionResult);
                 }
                 return commandResult;
             }
         }
-        return createDefaultCommandResult(utteranceRecognitionResults);
+        return createDefaultCommandHandlerResult(utteranceRecognitionResults);
     }
 
-    private void storeSuccessedUtteranceRecognitionResult(UtteranceRecognitionResult utteranceRecognitionResult) {
+    private void storeUtteranceRecognitionResult(UtteranceRecognitionResult utteranceRecognitionResult) {
         utteranceRecognitionResultsHistory.add(utteranceRecognitionResult);
         if (utteranceRecognitionResultsHistory.size() > RECOGNITION_RESULT_HISTORY_SIZE_MAX) {
             utteranceRecognitionResultsHistory.remove(0);
         }
     }
 
-    private UtteranceCommandHandlerResult createDefaultCommandResult(List<UtteranceRecognitionResult> utteranceRecognitionResults) {
+    private UtteranceCommandHandlerResult createDefaultCommandHandlerResult(List<UtteranceRecognitionResult> utteranceRecognitionResults) {
         return new UtteranceCommandHandlerResult(
                 (utteranceRecognitionResults.size() > 0) ? CommandHandlerResult.UNHANDLED : CommandHandlerResult.REJECTED
         );

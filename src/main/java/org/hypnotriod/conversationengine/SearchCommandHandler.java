@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import static org.hypnotriod.conversationengine.CommandsInitializer.CMD_SEARCH;
+import static org.hypnotriod.conversationengine.CommandsInitializer.CONTEXT_BASE;
 import org.hypnotriod.conversationengine.engine.commandhandler.UtteranceCommandHandler;
 import org.hypnotriod.conversationengine.engine.vo.UtteranceRecognitionResult;
 import org.hypnotriod.conversationengine.engine.vo.CommandHandlerResult;
@@ -15,7 +16,7 @@ import org.hypnotriod.conversationengine.engine.annotation.CommandHandler;
  *
  * @author Ilya Pikin
  */
-@CommandHandler(CMD_SEARCH)
+@CommandHandler(value = CMD_SEARCH, contexts = {CONTEXT_BASE})
 public class SearchCommandHandler extends UtteranceCommandHandler {
 
     @Override
@@ -23,7 +24,7 @@ public class SearchCommandHandler extends UtteranceCommandHandler {
             final UtteranceRecognitionResult utteranceRecognitionResult,
             final ImmutableList<UtteranceRecognitionResult> utteranceRecognitionResultsHistory) {
 
-        String searchFor = utteranceRecognitionResult.getRecognizedDatas().get("request").getValue();
+        String searchFor = utteranceRecognitionResult.fetchRecognizedUtteranceData("request").getValue();
 
         System.out.println("Searching for " + searchFor);
 

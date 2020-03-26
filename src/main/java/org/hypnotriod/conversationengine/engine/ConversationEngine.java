@@ -1,5 +1,7 @@
 package org.hypnotriod.conversationengine.engine;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.hypnotriod.conversationengine.engine.processor.UtteranceProcessor;
 import org.hypnotriod.conversationengine.engine.vo.UtteranceCommandHandlerResult;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,13 +19,11 @@ public class ConversationEngine {
     @Autowired
     private UtteranceProcessor utteranceProcessor;
 
+    @Getter
+    @Setter
     private String context = BASE_CONTEXT;
 
     public UtteranceCommandHandlerResult processUtterance(String utterance) {
         return utteranceProcessor.process(utterance, context);
-    }
-
-    public void changeContext(String context) {
-        this.context = context;
     }
 }
