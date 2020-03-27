@@ -31,11 +31,11 @@ public abstract class UtteranceCommandHandler {
     public String getName() {
         CommandHandler commandName = AnnotationUtils.findAnnotation(this.getClass(), CommandHandler.class);
 
-        if (commandName == null || commandName.value().isEmpty()) {
+        if (commandName == null || commandName.command().isEmpty()) {
             throw new RuntimeException("Command " + this + " should have @CommandHandler annotation with proper name");
         }
 
-        return commandName.value();
+        return commandName.command();
     }
 
     public String[] getContexts() {

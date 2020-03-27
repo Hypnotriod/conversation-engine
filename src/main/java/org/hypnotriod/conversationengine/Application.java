@@ -8,19 +8,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.ComponentScan;
 
 /**
  *
  * @author Ilya Pikin
  */
+@ComponentScan
 @SpringBootApplication
 public class Application implements CommandLineRunner {
 
     @Autowired
     private ConversationEngine conversationEngine;
-
-    @Autowired
-    CommandsInitializer commandsInitializer;
 
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
@@ -42,7 +41,7 @@ public class Application implements CommandLineRunner {
             CommandHandlerResult result = conversationEngine.processUtterance(line).getResult();
             if (result == CommandHandlerResult.UNHANDLED) {
                 System.out.println("Command was unhandled");
-            } else if (result != CommandHandlerResult.SUCCEED) {
+            } else if (result == CommandHandlerResult.REJECTED) {
                 System.out.println("Command not recognized");
             }
         }
