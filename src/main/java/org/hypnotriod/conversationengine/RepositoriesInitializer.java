@@ -14,6 +14,11 @@ import org.hypnotriod.conversationengine.customentity.Vehicle;
 import org.hypnotriod.conversationengine.customrepository.VechicleRepository;
 import org.hypnotriod.conversationengine.engine.entity.SpokenContext;
 import org.hypnotriod.conversationengine.engine.repository.SpokenContextRepository;
+import static org.hypnotriod.conversationengine.engine.ConversationEngine.NO_CONTEXT;
+import static org.hypnotriod.conversationengine.Constants.CMD_SEARCH;
+import static org.hypnotriod.conversationengine.Constants.CMD_SEARCH_FOR;
+import static org.hypnotriod.conversationengine.Constants.CMD_SHOW_SEARCH_HISTORY;
+import static org.hypnotriod.conversationengine.Constants.CONTEXT_SEARCH_FOR;
 
 /**
  *
@@ -36,13 +41,18 @@ public class RepositoriesInitializer {
 
     @PostConstruct
     private void init() {
-        spokenQueryService.save(new SpokenQuery("search for [request:?]", "en-US", "SEARCH", mapToSpokenContexts("BASE_CONTEXT")));
-        spokenQueryService.save(new SpokenQuery("google for [request:?]", "en-US", "SEARCH", mapToSpokenContexts("BASE_CONTEXT")));
-        spokenQueryService.save(new SpokenQuery("google [request:?]", "en-US", "SEARCH", mapToSpokenContexts("BASE_CONTEXT")));
-        spokenQueryService.save(new SpokenQuery("show search history", "en-US", "SHOW_SEARCH_HISTORY", mapToSpokenContexts("BASE_CONTEXT")));
-        spokenQueryService.save(new SpokenQuery("go to [key1:destination.value] by [key2:vehicle.value]", "en-US", "GO_TO_DESTINATION_BY_VECHICLE", mapToSpokenContexts("BASE_CONTEXT")));
-        spokenQueryService.save(new SpokenQuery("go to [key1:destination.value]", "en-US", "GO_TO_DESTINATION", mapToSpokenContexts("BASE_CONTEXT")));
-        spokenQueryService.save(new SpokenQuery("go to [key1:destination.value] right now", "en-US", "GO_TO_DESTINATION_NOW", mapToSpokenContexts("BASE_CONTEXT")));
+        spokenQueryService.save(new SpokenQuery("search for [request:?]", "en-US", CMD_SEARCH_FOR, mapToSpokenContexts(NO_CONTEXT)));
+        spokenQueryService.save(new SpokenQuery("google for [request:?]", "en-US", CMD_SEARCH_FOR, mapToSpokenContexts(NO_CONTEXT)));
+        spokenQueryService.save(new SpokenQuery("search for", "en-US", CMD_SEARCH, mapToSpokenContexts(NO_CONTEXT)));
+        spokenQueryService.save(new SpokenQuery("google for", "en-US", CMD_SEARCH, mapToSpokenContexts(NO_CONTEXT)));
+        spokenQueryService.save(new SpokenQuery("search", "en-US", CMD_SEARCH, mapToSpokenContexts(NO_CONTEXT)));
+        spokenQueryService.save(new SpokenQuery("google", "en-US", CMD_SEARCH, mapToSpokenContexts(NO_CONTEXT)));
+        spokenQueryService.save(new SpokenQuery("[request:?]", "en-US", CMD_SEARCH_FOR, mapToSpokenContexts(CONTEXT_SEARCH_FOR)));
+        spokenQueryService.save(new SpokenQuery("show search history", "en-US", CMD_SHOW_SEARCH_HISTORY, mapToSpokenContexts(NO_CONTEXT)));
+
+        spokenQueryService.save(new SpokenQuery("go to [key1:destination.value] by [key2:vehicle.value]", "en-US", "GO_TO_DESTINATION_BY_VECHICLE", mapToSpokenContexts(NO_CONTEXT)));
+        spokenQueryService.save(new SpokenQuery("go to [key1:destination.value]", "en-US", "GO_TO_DESTINATION", mapToSpokenContexts(NO_CONTEXT)));
+        spokenQueryService.save(new SpokenQuery("go to [key1:destination.value] right now", "en-US", "GO_TO_DESTINATION_NOW", mapToSpokenContexts(NO_CONTEXT)));
 
         destinationRepository.save(new Destination("home"));
         destinationRepository.save(new Destination("work"));

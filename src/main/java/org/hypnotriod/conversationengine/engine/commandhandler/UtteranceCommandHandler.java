@@ -4,7 +4,6 @@ import org.hypnotriod.conversationengine.engine.processor.UtteranceCommandProces
 import com.google.inject.internal.util.ImmutableList;
 import javax.annotation.PostConstruct;
 import org.hypnotriod.conversationengine.engine.ConversationEngine;
-import org.hypnotriod.conversationengine.engine.vo.CommandHandlerResult;
 import org.hypnotriod.conversationengine.engine.vo.UtteranceCommandHandlerResult;
 import org.hypnotriod.conversationengine.engine.vo.UtteranceRecognitionResult;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,22 +45,6 @@ public abstract class UtteranceCommandHandler {
         }
 
         return commandName.contexts();
-    }
-
-    protected void changeContext(String context) {
-        conversationEngine.setContext(context);
-    }
-
-    protected UtteranceCommandHandlerResult createResult(CommandHandlerResult executionResult) {
-        return new UtteranceCommandHandlerResult(executionResult);
-    }
-
-    protected UtteranceCommandHandlerResult createSuccedResult() {
-        return new UtteranceCommandHandlerResult(CommandHandlerResult.SUCCEED);
-    }
-
-    protected UtteranceCommandHandlerResult createRejectedResult() {
-        return new UtteranceCommandHandlerResult(CommandHandlerResult.REJECTED);
     }
 
     abstract public UtteranceCommandHandlerResult handle(

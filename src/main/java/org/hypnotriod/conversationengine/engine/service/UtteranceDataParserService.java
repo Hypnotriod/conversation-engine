@@ -25,6 +25,10 @@ public class UtteranceDataParserService {
         List<String> result = new ArrayList<>();
         String[] dummyLoads = query.split(REGEX_UTTERANCE_DATA);
 
+        if (dummyLoads.length == 0) {
+            dummyLoads = new String[]{""};
+        }
+
         for (int i = 0; i < dummyLoads.length; i++) {
             int dataStartIndex = utterance.indexOf(dummyLoads[i]) + dummyLoads[i].length();
             int dataEndIndex = (i + 1 == dummyLoads.length)

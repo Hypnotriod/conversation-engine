@@ -6,10 +6,14 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import org.hypnotriod.conversationengine.engine.ConversationEngine;
 import org.hypnotriod.conversationengine.engine.commandhandler.UtteranceCommandHandler;
 import org.hypnotriod.conversationengine.engine.vo.CommandHandlerResult;
+import org.hypnotriod.conversationengine.engine.vo.UtteranceCommandHandlerResultDelegate;
 import org.hypnotriod.conversationengine.engine.vo.UtteranceCommandHandlerResult;
+import org.hypnotriod.conversationengine.engine.vo.UtteranceCommandHandlerResultReject;
 import org.hypnotriod.conversationengine.engine.vo.UtteranceRecognitionResult;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -19,7 +23,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class UtteranceCommandProcessor {
 
-    private static final int RECOGNITION_RESULT_HISTORY_SIZE_MAX = 500;
+    public static final int RECOGNITION_RESULT_HISTORY_SIZE_MAX = 500;
+
+    @Autowired
+    private ConversationEngine conversationEngine;
 
     private final Map<String, Map<String, UtteranceCommandHandler>> utteranceCommandHandlers = new HashMap<>();
     private final List<UtteranceRecognitionResult> utteranceRecognitionResultsHistory = new LinkedList<>();
@@ -42,20 +49,45 @@ public class UtteranceCommandProcessor {
 
     public UtteranceCommandHandlerResult processUtteranceRecognitionResults(List<UtteranceRecognitionResult> utteranceRecognitionResults) {
         for (UtteranceRecognitionResult utteranceRecognitionResult : utteranceRecognitionResults) {
-            Optional<UtteranceCommandHandler> command = Optional.ofNullable(
-                    utteranceCommandHandlers.get(utteranceRecognitionResult.getContext()))
-                    .map(values -> values.get(utteranceRecognitionResult.getCommand()));
+            UtteranceCommandHandler commandHandler = fetchUtteranceCommandHandler(utteranceRecognitionResult.getContext(), utteranceRecognitionResult.getCommand());
+            if (commandHandler != null) {
+                UtteranceCommandHandlerResult commandResult = processUtteranceCommandHandler(commandHandler, utteranceRecognitionResult);
 
-            if (command.isPresent()) {
-                UtteranceCommandHandlerResult commandResult
-                        = command.get().handle(utteranceRecognitionResult, ImmutableList.copyOf(utteranceRecognitionResultsHistory));
-                if (commandResult.getResult() == CommandHandlerResult.SUCCEED) {
-                    storeUtteranceRecognitionResult(utteranceRecognitionResult);
+                if (commandResult.getResult() != CommandHandlerResult.REJECT) {
+                    return commandResult;
                 }
-                return commandResult;
             }
         }
-        return createDefaultCommandHandlerResult(utteranceRecognitionResults);
+        return new UtteranceCommandHandlerResultReject();
+    }
+
+    private UtteranceCommandHandlerResult processUtteranceCommandHandler(UtteranceCommandHandler commandHandler, UtteranceRecognitionResult utteranceRecognitionResult) {
+        UtteranceCommandHandlerResult commandResult
+                = commandHandler.handle(utteranceRecognitionResult, ImmutableList.copyOf(utteranceRecognitionResultsHistory));
+
+        if (commandResult.getResult() == CommandHandlerResult.DELEGATE) {
+            UtteranceCommandHandler followCommandHandler = fetchUtteranceCommandHandler(
+                    commandResult.getContext(),
+                    ((UtteranceCommandHandlerResultDelegate) commandResult).getCommand());
+
+            return followCommandHandler != null
+                    ? processUtteranceCommandHandler(followCommandHandler, utteranceRecognitionResult)
+                    : new UtteranceCommandHandlerResultReject();
+        }
+
+        if (commandResult.getResult() == CommandHandlerResult.COMPLETE
+                || commandResult.getResult() == CommandHandlerResult.CONTINUE) {
+            storeUtteranceRecognitionResult(utteranceRecognitionResult);
+            conversationEngine.setContext(commandResult.getContext());
+        }
+
+        return commandResult;
+    }
+
+    private UtteranceCommandHandler fetchUtteranceCommandHandler(String context, String command) {
+        return Optional.ofNullable(
+                utteranceCommandHandlers.get(context))
+                .map(values -> values.get(command)).orElse(null);
     }
 
     private void storeUtteranceRecognitionResult(UtteranceRecognitionResult utteranceRecognitionResult) {
@@ -63,11 +95,5 @@ public class UtteranceCommandProcessor {
         if (utteranceRecognitionResultsHistory.size() > RECOGNITION_RESULT_HISTORY_SIZE_MAX) {
             utteranceRecognitionResultsHistory.remove(0);
         }
-    }
-
-    private UtteranceCommandHandlerResult createDefaultCommandHandlerResult(List<UtteranceRecognitionResult> utteranceRecognitionResults) {
-        return new UtteranceCommandHandlerResult(
-                (utteranceRecognitionResults.size() > 0) ? CommandHandlerResult.UNHANDLED : CommandHandlerResult.REJECTED
-        );
     }
 }

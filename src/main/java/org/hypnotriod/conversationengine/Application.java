@@ -39,10 +39,8 @@ public class Application implements CommandLineRunner {
                 return;
             }
             CommandHandlerResult result = conversationEngine.processUtterance(line).getResult();
-            if (result == CommandHandlerResult.UNHANDLED) {
-                System.out.println("Command was unhandled");
-            } else if (result == CommandHandlerResult.REJECTED) {
-                System.out.println("Command not recognized");
+            if (result == CommandHandlerResult.REJECT) {
+                System.out.println("Sorry?");
             }
         }
     }

@@ -14,14 +14,14 @@ import org.springframework.stereotype.Component;
 @Component
 public class ConversationEngine {
 
-    public static String BASE_CONTEXT = "BASE_CONTEXT";
+    public static String NO_CONTEXT = "NO_CONTEXT";
 
     @Autowired
     private UtteranceProcessor utteranceProcessor;
 
     @Getter
     @Setter
-    private String context = BASE_CONTEXT;
+    private String context = NO_CONTEXT;
 
     public UtteranceCommandHandlerResult processUtterance(String utterance) {
         return utteranceProcessor.process(utterance, context);

@@ -5,9 +5,10 @@ package org.hypnotriod.conversationengine.engine.vo;
  * @author Ilya Pikin
  */
 public enum CommandHandlerResult {
-    UNHANDLED("UNHANDLED"),
-    REJECTED("REJECTED"),
-    SUCCEED("SUCCEED");
+    REJECT("REJECT"),
+    DELEGATE("DELEGATE"),
+    CONTINUE("CONTINUE"),
+    COMPLETE("COMPLETE");
 
     private final String value;
 
