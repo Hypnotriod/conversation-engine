@@ -11,8 +11,8 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import lombok.Data;
-import static org.hypnotriod.conversationengine.engine.contants.TextManipulationConstants.REGEX_SPOKEN_QUERY_DATA;
 import static org.hypnotriod.conversationengine.engine.contants.TextManipulationConstants.REGEX_UTTERANCE_DATA;
+import static org.hypnotriod.conversationengine.engine.contants.TextManipulationConstants.REGEX_DIALOG_QUERY_DATA;
 
 /**
  *
@@ -20,35 +20,35 @@ import static org.hypnotriod.conversationengine.engine.contants.TextManipulation
  */
 @Entity
 @Data
-@Table(name = "spoken_query")
-public class SpokenQuery implements Serializable {
+@Table(name = "dialog_query")
+public class DialogQuery implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String regexp;
     private String query;
-    private String language;
-    private String command;
+    private String languageCode;
+    private String commandName;
     @ManyToMany
     @JoinTable(
-            name = "spoken_query_spoken_context",
-            joinColumns = @JoinColumn(name = "spoken_query_id"),
-            inverseJoinColumns = @JoinColumn(name = "spoken_context_id"))
-    private List<SpokenContext> contexts;
+            name = "dialog_query_dialog_context",
+            joinColumns = @JoinColumn(name = "dialog_query_id"),
+            inverseJoinColumns = @JoinColumn(name = "dialog_context_id"))
+    private List<DialogContext> contexts;
 
-    public SpokenQuery() {
+    public DialogQuery() {
     }
 
-    public SpokenQuery(String query, String language, String command, List<SpokenContext> contexts) {
+    public DialogQuery(String query, String languageCode, String commandName, List<DialogContext> contexts) {
         this.regexp = buildRegExp(query);
         this.query = query;
-        this.language = language;
-        this.command = command;
+        this.languageCode = languageCode;
+        this.commandName = commandName;
         this.contexts = contexts;
     }
 
     private String buildRegExp(String query) {
-        return "^" + query.replaceAll(REGEX_UTTERANCE_DATA, REGEX_SPOKEN_QUERY_DATA) + "$";
+        return "^" + query.replaceAll(REGEX_UTTERANCE_DATA, REGEX_DIALOG_QUERY_DATA) + "$";
     }
 }

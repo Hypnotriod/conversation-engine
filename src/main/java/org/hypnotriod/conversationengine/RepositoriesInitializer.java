@@ -4,21 +4,25 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
-import org.hypnotriod.conversationengine.engine.entity.SpokenQuery;
+import org.hypnotriod.conversationengine.engine.entity.DialogQuery;
 import org.hypnotriod.conversationengine.customrepository.DestinationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.hypnotriod.conversationengine.engine.service.SpokenQueryService;
+import org.hypnotriod.conversationengine.engine.service.DialogQueryService;
 import org.hypnotriod.conversationengine.customentity.Destination;
 import org.hypnotriod.conversationengine.customentity.Vehicle;
 import org.hypnotriod.conversationengine.customrepository.VechicleRepository;
-import org.hypnotriod.conversationengine.engine.entity.SpokenContext;
-import org.hypnotriod.conversationengine.engine.repository.SpokenContextRepository;
-import static org.hypnotriod.conversationengine.engine.ConversationEngine.NO_CONTEXT;
+import org.hypnotriod.conversationengine.engine.entity.DialogContext;
 import static org.hypnotriod.conversationengine.Constants.CMD_SEARCH;
 import static org.hypnotriod.conversationengine.Constants.CMD_SEARCH_FOR;
 import static org.hypnotriod.conversationengine.Constants.CMD_SHOW_SEARCH_HISTORY;
 import static org.hypnotriod.conversationengine.Constants.CONTEXT_SEARCH_FOR;
+import static org.hypnotriod.conversationengine.Constants.CONTEXT_NO;
+import static org.hypnotriod.conversationengine.Constants.REPLY_WHAT_DO_YOU_WANT_TO_SEARCH;
+import org.hypnotriod.conversationengine.engine.entity.DialogReply;
+import org.hypnotriod.conversationengine.engine.entity.ReplyVariant;
+import org.hypnotriod.conversationengine.engine.service.DialogContextService;
+import org.hypnotriod.conversationengine.engine.service.DialogReplyService;
 
 /**
  *
@@ -28,10 +32,13 @@ import static org.hypnotriod.conversationengine.Constants.CONTEXT_SEARCH_FOR;
 public class RepositoriesInitializer {
 
     @Autowired
-    private SpokenQueryService spokenQueryService;
+    private DialogQueryService dialogQueryService;
 
     @Autowired
-    SpokenContextRepository spokenContextRepository;
+    DialogContextService dialogContextService;
+
+    @Autowired
+    DialogReplyService dialogReplyService;
 
     @Autowired
     private DestinationRepository destinationRepository;
@@ -41,18 +48,21 @@ public class RepositoriesInitializer {
 
     @PostConstruct
     private void init() {
-        spokenQueryService.save(new SpokenQuery("search for [request:?]", "en-US", CMD_SEARCH_FOR, mapToSpokenContexts(NO_CONTEXT)));
-        spokenQueryService.save(new SpokenQuery("google for [request:?]", "en-US", CMD_SEARCH_FOR, mapToSpokenContexts(NO_CONTEXT)));
-        spokenQueryService.save(new SpokenQuery("search for", "en-US", CMD_SEARCH, mapToSpokenContexts(NO_CONTEXT)));
-        spokenQueryService.save(new SpokenQuery("google for", "en-US", CMD_SEARCH, mapToSpokenContexts(NO_CONTEXT)));
-        spokenQueryService.save(new SpokenQuery("search", "en-US", CMD_SEARCH, mapToSpokenContexts(NO_CONTEXT)));
-        spokenQueryService.save(new SpokenQuery("google", "en-US", CMD_SEARCH, mapToSpokenContexts(NO_CONTEXT)));
-        spokenQueryService.save(new SpokenQuery("[request:?]", "en-US", CMD_SEARCH_FOR, mapToSpokenContexts(CONTEXT_SEARCH_FOR)));
-        spokenQueryService.save(new SpokenQuery("show search history", "en-US", CMD_SHOW_SEARCH_HISTORY, mapToSpokenContexts(NO_CONTEXT)));
+        dialogQueryService.save(new DialogQuery("search for [request:?]", "en-US", CMD_SEARCH_FOR, mapToDialogContexts(CONTEXT_NO)));
+        dialogQueryService.save(new DialogQuery("google for [request:?]", "en-US", CMD_SEARCH_FOR, mapToDialogContexts(CONTEXT_NO)));
+        dialogQueryService.save(new DialogQuery("search for", "en-US", CMD_SEARCH, mapToDialogContexts(CONTEXT_NO)));
+        dialogQueryService.save(new DialogQuery("google for", "en-US", CMD_SEARCH, mapToDialogContexts(CONTEXT_NO)));
+        dialogQueryService.save(new DialogQuery("search", "en-US", CMD_SEARCH, mapToDialogContexts(CONTEXT_NO)));
+        dialogQueryService.save(new DialogQuery("google", "en-US", CMD_SEARCH, mapToDialogContexts(CONTEXT_NO)));
+        dialogQueryService.save(new DialogQuery("[request:?]", "en-US", CMD_SEARCH_FOR, mapToDialogContexts(CONTEXT_SEARCH_FOR)));
+        dialogQueryService.save(new DialogQuery("show search history", "en-US", CMD_SHOW_SEARCH_HISTORY, mapToDialogContexts(CONTEXT_NO)));
 
-        spokenQueryService.save(new SpokenQuery("go to [key1:destination.value] by [key2:vehicle.value]", "en-US", "GO_TO_DESTINATION_BY_VECHICLE", mapToSpokenContexts(NO_CONTEXT)));
-        spokenQueryService.save(new SpokenQuery("go to [key1:destination.value]", "en-US", "GO_TO_DESTINATION", mapToSpokenContexts(NO_CONTEXT)));
-        spokenQueryService.save(new SpokenQuery("go to [key1:destination.value] right now", "en-US", "GO_TO_DESTINATION_NOW", mapToSpokenContexts(NO_CONTEXT)));
+        dialogReplyService.save(new DialogReply(REPLY_WHAT_DO_YOU_WANT_TO_SEARCH, CONTEXT_SEARCH_FOR,
+                mapToReplyVariantList(new ReplyVariant("What do you want to search?", "en-US")), null));
+
+        dialogQueryService.save(new DialogQuery("go to [key1:destination.value] by [key2:vehicle.value]", "en-US", "GO_TO_DESTINATION_BY_VECHICLE", mapToDialogContexts(CONTEXT_NO)));
+        dialogQueryService.save(new DialogQuery("go to [key1:destination.value]", "en-US", "GO_TO_DESTINATION", mapToDialogContexts(CONTEXT_NO)));
+        dialogQueryService.save(new DialogQuery("go to [key1:destination.value] right now", "en-US", "GO_TO_DESTINATION_NOW", mapToDialogContexts(CONTEXT_NO)));
 
         destinationRepository.save(new Destination("home"));
         destinationRepository.save(new Destination("work"));
@@ -62,18 +72,22 @@ public class RepositoriesInitializer {
         vechicleRepository.save(new Vehicle("several words test"));
     }
 
-    private List<SpokenContext> mapToSpokenContexts(String... contextNames) {
+    private List<DialogContext> mapToDialogContexts(String... contextNames) {
         return Arrays.asList(contextNames).stream()
-                .map(contextName -> fetchSpokenContextByName(contextName))
+                .map(contextName -> fetchDialogContextByName(contextName))
                 .collect(Collectors.toList());
     }
 
-    private SpokenContext fetchSpokenContextByName(String contextName) {
-        SpokenContext spokenContext = spokenContextRepository.findByName(contextName);
-        if (spokenContext == null) {
-            spokenContext = new SpokenContext(contextName);
-            spokenContextRepository.save(spokenContext);
+    private DialogContext fetchDialogContextByName(String contextName) {
+        DialogContext dialogContext = dialogContextService.findByName(contextName);
+        if (dialogContext == null) {
+            dialogContext = new DialogContext(contextName);
+            dialogContextService.save(dialogContext);
         }
-        return spokenContext;
+        return dialogContext;
+    }
+
+    private List<ReplyVariant> mapToReplyVariantList(ReplyVariant... replyVariants) {
+        return Arrays.asList(replyVariants).stream().collect(Collectors.toList());
     }
 }

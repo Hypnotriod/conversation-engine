@@ -21,9 +21,9 @@ public class ConversationEngine {
 
     @Getter
     @Setter
-    private String context = NO_CONTEXT;
+    private String contextName = NO_CONTEXT;
 
     public UtteranceCommandHandlerResult processUtterance(String utterance) {
-        return utteranceProcessor.process(utterance, context);
+        return utteranceProcessor.process(utterance, contextName);
     }
 }

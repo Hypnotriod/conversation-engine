@@ -12,5 +12,5 @@ import lombok.ToString;
 public class UtteranceCommandHandlerResultReject extends UtteranceCommandHandlerResult {
 
     private final CommandHandlerResult result = CommandHandlerResult.REJECT;
-    private final String context = null;
+    private final String contextName = null;
 }

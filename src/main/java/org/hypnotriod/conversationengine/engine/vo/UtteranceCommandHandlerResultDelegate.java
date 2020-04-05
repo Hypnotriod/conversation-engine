@@ -13,10 +13,10 @@ public class UtteranceCommandHandlerResultDelegate extends UtteranceCommandHandl
 
     private final CommandHandlerResult result = CommandHandlerResult.DELEGATE;
     private final String command;
-    private final String context;
+    private final String contextName;
 
-    public UtteranceCommandHandlerResultDelegate(String command, String context) {
+    public UtteranceCommandHandlerResultDelegate(String command, String contextName) {
         this.command = command;
-        this.context = context;
+        this.contextName = contextName;
     }
 }

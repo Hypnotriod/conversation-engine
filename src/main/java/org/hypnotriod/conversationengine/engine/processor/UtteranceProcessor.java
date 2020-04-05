@@ -6,11 +6,11 @@ import java.util.List;
 import java.util.Map;
 import org.hypnotriod.conversationengine.engine.vo.RecognizedUtteranceCustomData;
 import org.hypnotriod.conversationengine.engine.vo.RecognizedUtteranceData;
-import org.hypnotriod.conversationengine.engine.entity.SpokenQuery;
+import org.hypnotriod.conversationengine.engine.entity.DialogQuery;
 import org.hypnotriod.conversationengine.engine.vo.UtteranceData;
 import org.hypnotriod.conversationengine.engine.vo.UtteranceRecognitionResult;
 import org.hypnotriod.conversationengine.engine.service.CustomDataService;
-import org.hypnotriod.conversationengine.engine.service.SpokenQueryService;
+import org.hypnotriod.conversationengine.engine.service.DialogQueryService;
 import org.hypnotriod.conversationengine.engine.service.UtteranceDataParserService;
 import org.hypnotriod.conversationengine.engine.vo.CustomDataMatch;
 import org.hypnotriod.conversationengine.engine.vo.UtteranceCommandHandlerResult;
@@ -29,7 +29,7 @@ public class UtteranceProcessor {
     private CustomDataService customDataService;
 
     @Autowired
-    private SpokenQueryService spokenQueryService;
+    private DialogQueryService dialogQueryService;
 
     @Autowired
     private UtteranceDataParserService utteranceDataParserService;
@@ -37,11 +37,11 @@ public class UtteranceProcessor {
     @Autowired
     private UtteranceCommandProcessor utteranceCommandProcessor;
 
-    public UtteranceCommandHandlerResult process(String utterance, String context) {
+    public UtteranceCommandHandlerResult process(String utterance, String contextName) {
         utterance = prepareUtterance(utterance);
 
-        List<SpokenQuery> matchedSpokenQuerys = spokenQueryService.findAllMathces(utterance, context);
-        List<UtteranceRecognitionResult> utteranceRecognitionResults = processSpokenQueries(matchedSpokenQuerys, utterance, context);
+        List<DialogQuery> matchedSpokenQuerys = dialogQueryService.findAllMathces(utterance, contextName);
+        List<UtteranceRecognitionResult> utteranceRecognitionResults = processSpokenQueries(matchedSpokenQuerys, utterance, contextName);
 
         return utteranceCommandProcessor.processUtteranceRecognitionResults(utteranceRecognitionResults);
     }
@@ -50,12 +50,12 @@ public class UtteranceProcessor {
         return StringUtils.trimTrailingWhitespace(utterance).toLowerCase();
     }
 
-    private List<UtteranceRecognitionResult> processSpokenQueries(List<SpokenQuery> spokenQueries, String utterance, String context) {
+    private List<UtteranceRecognitionResult> processSpokenQueries(List<DialogQuery> dialogQueries, String utterance, String contextName) {
         List<UtteranceRecognitionResult> utteranceRecognitionResults = new ArrayList<>();
 
-        spokenQueries.forEach((spokenQuery) -> {
-            List<UtteranceData> utteranceDatas = utteranceDataParserService.parse(utterance, spokenQuery);
-            UtteranceRecognitionResult utteranceRecognitionResult = proceesSpokenQueryDatas(utteranceDatas, spokenQuery, context);
+        dialogQueries.forEach((dialogQuery) -> {
+            List<UtteranceData> utteranceDatas = utteranceDataParserService.parse(utterance, dialogQuery);
+            UtteranceRecognitionResult utteranceRecognitionResult = proceesSpokenQueryDatas(utteranceDatas, dialogQuery, contextName);
             if (utteranceRecognitionResult != null) {
                 utteranceRecognitionResults.add(utteranceRecognitionResult);
             }
@@ -64,7 +64,7 @@ public class UtteranceProcessor {
         return utteranceRecognitionResults;
     }
 
-    private UtteranceRecognitionResult proceesSpokenQueryDatas(List<UtteranceData> utteranceDatas, SpokenQuery spokenQuery, String context) {
+    private UtteranceRecognitionResult proceesSpokenQueryDatas(List<UtteranceData> utteranceDatas, DialogQuery dialogQuery, String contextName) {
         Map<String, RecognizedUtteranceData> recognizedUtteranceDatas = new HashMap<>();
 
         utteranceDatas.forEach((utteranceData) -> {
@@ -90,10 +90,10 @@ public class UtteranceProcessor {
 
         if (utteranceDatas.size() == recognizedUtteranceDatas.size()) {
             return new UtteranceRecognitionResult(
-                    spokenQuery.getQuery(),
-                    spokenQuery.getLanguage(),
-                    spokenQuery.getCommand(),
-                    context,
+                    dialogQuery.getQuery(),
+                    dialogQuery.getLanguageCode(),
+                    dialogQuery.getCommandName(),
+                    contextName,
                     recognizedUtteranceDatas);
         } else {
             return null;

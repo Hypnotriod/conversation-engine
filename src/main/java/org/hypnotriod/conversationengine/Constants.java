@@ -12,4 +12,6 @@ public class Constants {
 
     public static final String CONTEXT_NO = "NO_CONTEXT";
     public static final String CONTEXT_SEARCH_FOR = "SEARCH_FOR";
+
+    public static final String REPLY_WHAT_DO_YOU_WANT_TO_SEARCH = "WHAT_DO_YOU_WANT_TO_SEARCH";
 }

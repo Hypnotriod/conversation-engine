@@ -30,21 +30,21 @@ public abstract class UtteranceCommandHandler {
     public String getName() {
         CommandHandler commandName = AnnotationUtils.findAnnotation(this.getClass(), CommandHandler.class);
 
-        if (commandName == null || commandName.command().isEmpty()) {
+        if (commandName == null || commandName.commandName().isEmpty()) {
             throw new RuntimeException("Command " + this + " should have @CommandHandler annotation with proper name");
         }
 
-        return commandName.command();
+        return commandName.commandName();
     }
 
     public String[] getContexts() {
         CommandHandler commandName = AnnotationUtils.findAnnotation(this.getClass(), CommandHandler.class);
 
-        if (commandName == null || commandName.contexts().length == 0) {
+        if (commandName == null || commandName.contextNames().length == 0) {
             throw new RuntimeException("Command " + this + " should have @CommandHandler annotation with one or more context");
         }
 
-        return commandName.contexts();
+        return commandName.contextNames();
     }
 
     abstract public UtteranceCommandHandlerResult handle(

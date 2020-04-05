@@ -49,7 +49,7 @@ public class UtteranceCommandProcessor {
 
     public UtteranceCommandHandlerResult processUtteranceRecognitionResults(List<UtteranceRecognitionResult> utteranceRecognitionResults) {
         for (UtteranceRecognitionResult utteranceRecognitionResult : utteranceRecognitionResults) {
-            UtteranceCommandHandler commandHandler = fetchUtteranceCommandHandler(utteranceRecognitionResult.getContext(), utteranceRecognitionResult.getCommand());
+            UtteranceCommandHandler commandHandler = fetchUtteranceCommandHandler(utteranceRecognitionResult.getContextName(), utteranceRecognitionResult.getCommandName());
             if (commandHandler != null) {
                 UtteranceCommandHandlerResult commandResult = processUtteranceCommandHandler(commandHandler, utteranceRecognitionResult);
 
@@ -67,7 +67,7 @@ public class UtteranceCommandProcessor {
 
         if (commandResult.getResult() == CommandHandlerResult.DELEGATE) {
             UtteranceCommandHandler followCommandHandler = fetchUtteranceCommandHandler(
-                    commandResult.getContext(),
+                    commandResult.getContextName(),
                     ((UtteranceCommandHandlerResultDelegate) commandResult).getCommand());
 
             return followCommandHandler != null
@@ -78,16 +78,16 @@ public class UtteranceCommandProcessor {
         if (commandResult.getResult() == CommandHandlerResult.COMPLETE
                 || commandResult.getResult() == CommandHandlerResult.CONTINUE) {
             storeUtteranceRecognitionResult(utteranceRecognitionResult);
-            conversationEngine.setContext(commandResult.getContext());
+            conversationEngine.setContextName(commandResult.getContextName());
         }
 
         return commandResult;
     }
 
-    private UtteranceCommandHandler fetchUtteranceCommandHandler(String context, String command) {
+    private UtteranceCommandHandler fetchUtteranceCommandHandler(String context, String commandName) {
         return Optional.ofNullable(
                 utteranceCommandHandlers.get(context))
-                .map(values -> values.get(command)).orElse(null);
+                .map(values -> values.get(commandName)).orElse(null);
     }
 
     private void storeUtteranceRecognitionResult(UtteranceRecognitionResult utteranceRecognitionResult) {

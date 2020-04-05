@@ -14,7 +14,7 @@ import static org.hypnotriod.conversationengine.Constants.CONTEXT_NO;
  *
  * @author Ilya Pikin
  */
-@CommandHandler(command = CMD_SEARCH, contexts = {CONTEXT_NO})
+@CommandHandler(commandName = CMD_SEARCH, contextNames = {CONTEXT_NO})
 public class SearchCommandHandler extends UtteranceCommandHandler {
 
     @Override

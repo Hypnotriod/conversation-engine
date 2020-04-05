@@ -1,6 +1,6 @@
 package org.hypnotriod.conversationengine.engine.service;
 
-import org.hypnotriod.conversationengine.engine.entity.SpokenQuery;
+import org.hypnotriod.conversationengine.engine.entity.DialogQuery;
 import org.hypnotriod.conversationengine.engine.vo.UtteranceData;
 import org.springframework.stereotype.Component;
 import java.util.ArrayList;
@@ -16,9 +16,9 @@ import static org.hypnotriod.conversationengine.engine.contants.TextManipulation
 @Component
 public class UtteranceDataParserService {
 
-    public List<UtteranceData> parse(String utterance, SpokenQuery spokenQuery) {
-        List<String> utteranceDatas = extractDatasFromUserUtterance(utterance, spokenQuery.getQuery());
-        return parseSpokenQueryDatas(utteranceDatas, spokenQuery);
+    public List<UtteranceData> parse(String utterance, DialogQuery dialogQuery) {
+        List<String> utteranceDatas = extractDatasFromUserUtterance(utterance, dialogQuery.getQuery());
+        return parseSpokenQueryDatas(utteranceDatas, dialogQuery);
     }
 
     private List<String> extractDatasFromUserUtterance(String utterance, String query) {
@@ -41,9 +41,9 @@ public class UtteranceDataParserService {
         return result;
     }
 
-    private List<UtteranceData> parseSpokenQueryDatas(List<String> utteranceDatas, SpokenQuery spokenQuery) {
+    private List<UtteranceData> parseSpokenQueryDatas(List<String> utteranceDatas, DialogQuery dialogQuery) {
         List<UtteranceData> result = new ArrayList<>();
-        Matcher matcher = PATTERN_UTTERANCE_DATA.matcher(spokenQuery.getQuery());
+        Matcher matcher = PATTERN_UTTERANCE_DATA.matcher(dialogQuery.getQuery());
 
         while (matcher.find()) {
             String dataPattern = matcher.group();

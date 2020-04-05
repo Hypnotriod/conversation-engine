@@ -1,6 +1,7 @@
 package org.hypnotriod.conversationengine.engine.repository;
 
-import org.hypnotriod.conversationengine.engine.entity.SpokenContext;
+import javax.transaction.Transactional;
+import org.hypnotriod.conversationengine.engine.entity.DialogReply;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -9,7 +10,7 @@ import org.springframework.stereotype.Repository;
  * @author Ilya Pikin
  */
 @Repository
-public interface SpokenContextRepository extends JpaRepository<SpokenContext, Long> {
+@Transactional
+public interface DialogReplyRepository extends JpaRepository<DialogReply, Long> {
 
-    SpokenContext findByName(String name);
 }

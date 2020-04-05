@@ -16,7 +16,7 @@ import static org.hypnotriod.conversationengine.Constants.CONTEXT_NO;
  *
  * @author Ilya Pikin
  */
-@CommandHandler(command = CMD_SHOW_SEARCH_HISTORY, contexts = {CONTEXT_NO})
+@CommandHandler(commandName = CMD_SHOW_SEARCH_HISTORY, contextNames = {CONTEXT_NO})
 public class ShowSearchHistoryCommandHandler extends UtteranceCommandHandler {
 
     @Override
@@ -25,7 +25,7 @@ public class ShowSearchHistoryCommandHandler extends UtteranceCommandHandler {
             ImmutableList<UtteranceRecognitionResult> utteranceRecognitionResultsHistory) {
 
         List<String> searchHistory = utteranceRecognitionResultsHistory.stream()
-                .filter(result -> result.getCommand().equals(CMD_SEARCH_FOR))
+                .filter(result -> result.getCommandName().equals(CMD_SEARCH_FOR))
                 .map(result -> result.fetchRecognizedUtteranceData("request").getValue())
                 .collect(Collectors.toList());
 

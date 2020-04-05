@@ -17,22 +17,22 @@ import lombok.Data;
  */
 @Entity
 @Data
-@Table(name = "spoken_context",
+@Table(name = "dialog_context",
         uniqueConstraints = {
             @UniqueConstraint(columnNames = {"name"})})
-public class SpokenContext implements Serializable {
+public class DialogContext implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToMany(mappedBy = "contexts")
-    private List<SpokenQuery> spokenQuery;
+    private List<DialogQuery> dialogQuery;
     private String name;
 
-    public SpokenContext() {
+    public DialogContext() {
     }
 
-    public SpokenContext(String name) {
+    public DialogContext(String name) {
         this.name = name;
     }
 }

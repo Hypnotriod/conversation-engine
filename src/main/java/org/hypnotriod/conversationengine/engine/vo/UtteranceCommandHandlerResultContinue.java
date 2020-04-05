@@ -12,9 +12,9 @@ import lombok.ToString;
 public class UtteranceCommandHandlerResultContinue extends UtteranceCommandHandlerResult {
 
     private final CommandHandlerResult result = CommandHandlerResult.CONTINUE;
-    private final String context;
+    private final String contextName;
 
-    public UtteranceCommandHandlerResultContinue(String context) {
-        this.context = context;
+    public UtteranceCommandHandlerResultContinue(String contextName) {
+        this.contextName = contextName;
     }
 }

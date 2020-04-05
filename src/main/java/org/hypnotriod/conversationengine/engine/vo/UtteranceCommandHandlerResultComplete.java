@@ -13,5 +13,5 @@ import org.hypnotriod.conversationengine.engine.ConversationEngine;
 public class UtteranceCommandHandlerResultComplete extends UtteranceCommandHandlerResult {
 
     private final CommandHandlerResult result = CommandHandlerResult.COMPLETE;
-    private final String context = ConversationEngine.NO_CONTEXT;
+    private final String contextName = ConversationEngine.NO_CONTEXT;
 }

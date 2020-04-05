@@ -8,5 +8,5 @@ public abstract class UtteranceCommandHandlerResult {
 
     public abstract CommandHandlerResult getResult();
     
-    public abstract String getContext();
+    public abstract String getContextName();
 }

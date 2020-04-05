@@ -17,7 +17,7 @@ import org.hypnotriod.conversationengine.engine.vo.UtteranceCommandHandlerResult
  *
  * @author Ilya Pikin
  */
-@CommandHandler(command = CMD_SEARCH_FOR, contexts = {CONTEXT_NO, CONTEXT_SEARCH_FOR})
+@CommandHandler(commandName = CMD_SEARCH_FOR, contextNames = {CONTEXT_NO, CONTEXT_SEARCH_FOR})
 public class SearchForCommandHandler extends UtteranceCommandHandler {
 
     @Override

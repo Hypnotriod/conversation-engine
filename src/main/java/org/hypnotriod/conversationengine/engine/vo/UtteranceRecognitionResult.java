@@ -14,16 +14,16 @@ import lombok.ToString;
 public class UtteranceRecognitionResult {
 
     private final String query;
-    private final String language;
-    private final String command;
-    private final String context;
+    private final String languageCode;
+    private final String commandName;
+    private final String contextName;
     private final Map<String, RecognizedUtteranceData> recognizedDatas;
 
-    public UtteranceRecognitionResult(String query, String language, String command, String context, Map<String, RecognizedUtteranceData> recognizedDatas) {
+    public UtteranceRecognitionResult(String query, String languageCode, String commandName, String contextName, Map<String, RecognizedUtteranceData> recognizedDatas) {
         this.query = query;
-        this.language = language;
-        this.command = command;
-        this.context = context;
+        this.languageCode = languageCode;
+        this.commandName = commandName;
+        this.contextName = contextName;
         this.recognizedDatas = recognizedDatas;
     }
 
