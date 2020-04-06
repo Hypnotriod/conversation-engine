@@ -19,10 +19,13 @@ import static org.hypnotriod.conversationengine.Constants.CMD_SHOW_SEARCH_HISTOR
 import static org.hypnotriod.conversationengine.Constants.CONTEXT_SEARCH_FOR;
 import static org.hypnotriod.conversationengine.Constants.CONTEXT_NO;
 import static org.hypnotriod.conversationengine.Constants.REPLY_WHAT_DO_YOU_WANT_TO_SEARCH;
+import static org.hypnotriod.conversationengine.Constants.REPLY_SEARCHING;
+import static org.hypnotriod.conversationengine.Constants.REPLY_SHOWING_SEARCH_HISTORY;
 import org.hypnotriod.conversationengine.engine.entity.DialogReply;
 import org.hypnotriod.conversationengine.engine.entity.ReplyVariant;
 import org.hypnotriod.conversationengine.engine.service.DialogContextService;
 import org.hypnotriod.conversationengine.engine.service.DialogReplyService;
+import static org.hypnotriod.conversationengine.Constants.REPLY_NO_SEARCH_HISTORY_FOUND;
 
 /**
  *
@@ -59,6 +62,12 @@ public class RepositoriesInitializer {
 
         dialogReplyService.save(new DialogReply(REPLY_WHAT_DO_YOU_WANT_TO_SEARCH, CONTEXT_SEARCH_FOR,
                 mapToReplyVariantList(new ReplyVariant("What do you want to search?", "en-US")), null));
+        dialogReplyService.save(new DialogReply(REPLY_SEARCHING, CONTEXT_NO,
+                mapToReplyVariantList(new ReplyVariant("Searching...", "en-US")), null));
+        dialogReplyService.save(new DialogReply(REPLY_NO_SEARCH_HISTORY_FOUND, CONTEXT_NO,
+                mapToReplyVariantList(new ReplyVariant("No search history found", "en-US")), null));
+        dialogReplyService.save(new DialogReply(REPLY_SHOWING_SEARCH_HISTORY, CONTEXT_NO,
+                mapToReplyVariantList(new ReplyVariant("Search history:\n", "en-US")), null));
 
         dialogQueryService.save(new DialogQuery("go to [key1:destination.value] by [key2:vehicle.value]", "en-US", "GO_TO_DESTINATION_BY_VECHICLE", mapToDialogContexts(CONTEXT_NO)));
         dialogQueryService.save(new DialogQuery("go to [key1:destination.value]", "en-US", "GO_TO_DESTINATION", mapToDialogContexts(CONTEXT_NO)));

@@ -3,7 +3,9 @@ package org.hypnotriod.conversationengine;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import org.hypnotriod.conversationengine.engine.ConversationEngine;
+import org.hypnotriod.conversationengine.engine.entity.ReplyVariant;
 import org.hypnotriod.conversationengine.engine.vo.CommandHandlerResult;
+import org.hypnotriod.conversationengine.engine.vo.UtteranceCommandHandlerResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -38,9 +40,15 @@ public class Application implements CommandLineRunner {
             if (line.equals("exit")) {
                 return;
             }
-            CommandHandlerResult result = conversationEngine.processUtterance(line).getResult();
-            if (result == CommandHandlerResult.REJECT) {
+            UtteranceCommandHandlerResult handlerResult = conversationEngine.processUtterance(line);
+            if (handlerResult.getResult() == CommandHandlerResult.REJECT) {
                 System.out.println("Sorry?");
+            } else {
+                String languageCode = handlerResult.getUtteranceRecognitionResult().getLanguageCode();
+                ReplyVariant replyVariant = handlerResult.getDialogReply().getSpokenReply(languageCode);
+                if (replyVariant != null) {
+                    System.err.println(replyVariant.getText());
+                }
             }
         }
     }

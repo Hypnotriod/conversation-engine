@@ -18,4 +18,8 @@ public class DialogReplyService {
     public void save(DialogReply dialogReply) {
         dialogReplyRepository.save(dialogReply);
     }
+
+    public DialogReply findByName(String name) {
+        return dialogReplyRepository.findByName(name);
+    }
 }

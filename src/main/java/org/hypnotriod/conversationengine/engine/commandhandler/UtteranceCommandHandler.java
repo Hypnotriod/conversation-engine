@@ -9,12 +9,20 @@ import org.hypnotriod.conversationengine.engine.vo.UtteranceRecognitionResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.hypnotriod.conversationengine.engine.annotation.CommandHandler;
+import org.hypnotriod.conversationengine.engine.service.DialogReplyService;
+import org.hypnotriod.conversationengine.engine.vo.UtteranceCommandHandlerResultComplete;
+import org.hypnotriod.conversationengine.engine.vo.UtteranceCommandHandlerResultContinue;
+import org.hypnotriod.conversationengine.engine.vo.UtteranceCommandHandlerResultDelegate;
+import org.hypnotriod.conversationengine.engine.vo.UtteranceCommandHandlerResultReject;
 
 /**
  *
  * @author Ilya Pikin
  */
 public abstract class UtteranceCommandHandler {
+
+    @Autowired
+    private DialogReplyService dialogReplyService;
 
     @Autowired
     private UtteranceCommandProcessor utteranceCommandProcessor;
@@ -45,6 +53,26 @@ public abstract class UtteranceCommandHandler {
         }
 
         return commandName.contextNames();
+    }
+
+    public UtteranceCommandHandlerResultComplete getResultComplete(String dialogReplyName) {
+        return new UtteranceCommandHandlerResultComplete(
+                dialogReplyService.findByName(dialogReplyName)
+        );
+    }
+
+    public UtteranceCommandHandlerResultContinue getResultContinue(String dialogReplyName) {
+        return new UtteranceCommandHandlerResultContinue(
+                dialogReplyService.findByName(dialogReplyName)
+        );
+    }
+
+    public UtteranceCommandHandlerResultDelegate getResultDelegate(String commandName, String contextName) {
+        return new UtteranceCommandHandlerResultDelegate(commandName, contextName);
+    }
+
+    public UtteranceCommandHandlerResultReject getResultDelegate() {
+        return new UtteranceCommandHandlerResultReject();
     }
 
     abstract public UtteranceCommandHandlerResult handle(

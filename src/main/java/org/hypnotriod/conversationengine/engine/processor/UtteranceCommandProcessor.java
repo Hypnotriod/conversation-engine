@@ -62,13 +62,14 @@ public class UtteranceCommandProcessor {
     }
 
     private UtteranceCommandHandlerResult processUtteranceCommandHandler(UtteranceCommandHandler commandHandler, UtteranceRecognitionResult utteranceRecognitionResult) {
+        ImmutableList<UtteranceRecognitionResult> recognitionResultsHistory = ImmutableList.copyOf(utteranceRecognitionResultsHistory);
         UtteranceCommandHandlerResult commandResult
-                = commandHandler.handle(utteranceRecognitionResult, ImmutableList.copyOf(utteranceRecognitionResultsHistory));
+                = commandHandler.handle(utteranceRecognitionResult, recognitionResultsHistory);
 
         if (commandResult.getResult() == CommandHandlerResult.DELEGATE) {
             UtteranceCommandHandler followCommandHandler = fetchUtteranceCommandHandler(
                     commandResult.getContextName(),
-                    ((UtteranceCommandHandlerResultDelegate) commandResult).getCommand());
+                    ((UtteranceCommandHandlerResultDelegate) commandResult).getCommandName());
 
             return followCommandHandler != null
                     ? processUtteranceCommandHandler(followCommandHandler, utteranceRecognitionResult)
@@ -78,6 +79,8 @@ public class UtteranceCommandProcessor {
         if (commandResult.getResult() == CommandHandlerResult.COMPLETE
                 || commandResult.getResult() == CommandHandlerResult.CONTINUE) {
             storeUtteranceRecognitionResult(utteranceRecognitionResult);
+            commandResult.setUtteranceRecognitionResult(utteranceRecognitionResult);
+            commandResult.setUtteranceRecognitionResultsHistory(recognitionResultsHistory);
             conversationEngine.setContextName(commandResult.getContextName());
         }
 

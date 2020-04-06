@@ -2,6 +2,7 @@ package org.hypnotriod.conversationengine.engine.vo;
 
 import lombok.Getter;
 import lombok.ToString;
+import org.hypnotriod.conversationengine.engine.entity.DialogReply;
 
 /**
  *
@@ -12,5 +13,6 @@ import lombok.ToString;
 public class UtteranceCommandHandlerResultReject extends UtteranceCommandHandlerResult {
 
     private final CommandHandlerResult result = CommandHandlerResult.REJECT;
+    private final DialogReply dialogReply = null;
     private final String contextName = null;
 }

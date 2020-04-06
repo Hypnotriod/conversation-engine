@@ -12,5 +12,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 @Transactional
 public interface DialogReplyRepository extends JpaRepository<DialogReply, Long> {
-
+    DialogReply findByName(String name);
 }
