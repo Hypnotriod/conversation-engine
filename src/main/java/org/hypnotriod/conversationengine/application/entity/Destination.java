@@ -1,4 +1,4 @@
-package org.hypnotriod.conversationengine.customentity;
+package org.hypnotriod.conversationengine.application.entity;
 
 import java.io.Serializable;
 import javax.persistence.Entity;

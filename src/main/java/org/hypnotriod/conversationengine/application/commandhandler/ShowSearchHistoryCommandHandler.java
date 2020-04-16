@@ -1,13 +1,13 @@
-package org.hypnotriod.conversationengine;
+package org.hypnotriod.conversationengine.application.commandhandler;
 
 import com.google.inject.internal.util.ImmutableList;
 import java.util.List;
 import java.util.stream.Collectors;
-import static org.hypnotriod.conversationengine.Constants.CMD_SEARCH_FOR;
-import static org.hypnotriod.conversationengine.Constants.CONTEXT_NO;
-import static org.hypnotriod.conversationengine.Constants.CMD_SHOW_SEARCH_HISTORY;
-import static org.hypnotriod.conversationengine.Constants.REPLY_SHOWING_SEARCH_HISTORY;
-import static org.hypnotriod.conversationengine.Constants.REPLY_NO_SEARCH_HISTORY_FOUND;
+import static org.hypnotriod.conversationengine.application.constants.Constants.CMD_SEARCH_FOR;
+import static org.hypnotriod.conversationengine.application.constants.Constants.CONTEXT_NO;
+import static org.hypnotriod.conversationengine.application.constants.Constants.CMD_SHOW_SEARCH_HISTORY;
+import static org.hypnotriod.conversationengine.application.constants.Constants.REPLY_SHOWING_SEARCH_HISTORY;
+import static org.hypnotriod.conversationengine.application.constants.Constants.REPLY_NO_SEARCH_HISTORY_FOUND;
 import org.hypnotriod.conversationengine.engine.commandhandler.UtteranceCommandHandler;
 import org.hypnotriod.conversationengine.engine.vo.UtteranceRecognitionResult;
 import org.hypnotriod.conversationengine.engine.vo.UtteranceCommandHandlerResult;

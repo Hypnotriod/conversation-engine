@@ -1,31 +1,31 @@
-package org.hypnotriod.conversationengine;
+package org.hypnotriod.conversationengine.application;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import org.hypnotriod.conversationengine.engine.entity.DialogQuery;
-import org.hypnotriod.conversationengine.customrepository.DestinationRepository;
+import org.hypnotriod.conversationengine.application.repository.DestinationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.hypnotriod.conversationengine.engine.service.DialogQueryService;
-import org.hypnotriod.conversationengine.customentity.Destination;
-import org.hypnotriod.conversationengine.customentity.Vehicle;
-import org.hypnotriod.conversationengine.customrepository.VechicleRepository;
+import org.hypnotriod.conversationengine.application.entity.Destination;
+import org.hypnotriod.conversationengine.application.entity.Vehicle;
+import org.hypnotriod.conversationengine.application.repository.VechicleRepository;
 import org.hypnotriod.conversationengine.engine.entity.DialogContext;
-import static org.hypnotriod.conversationengine.Constants.CMD_SEARCH;
-import static org.hypnotriod.conversationengine.Constants.CMD_SEARCH_FOR;
-import static org.hypnotriod.conversationengine.Constants.CMD_SHOW_SEARCH_HISTORY;
-import static org.hypnotriod.conversationengine.Constants.CONTEXT_SEARCH_FOR;
-import static org.hypnotriod.conversationengine.Constants.CONTEXT_NO;
-import static org.hypnotriod.conversationengine.Constants.REPLY_WHAT_DO_YOU_WANT_TO_SEARCH;
-import static org.hypnotriod.conversationengine.Constants.REPLY_SEARCHING;
-import static org.hypnotriod.conversationengine.Constants.REPLY_SHOWING_SEARCH_HISTORY;
+import static org.hypnotriod.conversationengine.application.constants.Constants.CMD_SEARCH;
+import static org.hypnotriod.conversationengine.application.constants.Constants.CMD_SEARCH_FOR;
+import static org.hypnotriod.conversationengine.application.constants.Constants.CMD_SHOW_SEARCH_HISTORY;
+import static org.hypnotriod.conversationengine.application.constants.Constants.CONTEXT_SEARCH_FOR;
+import static org.hypnotriod.conversationengine.application.constants.Constants.CONTEXT_NO;
+import static org.hypnotriod.conversationengine.application.constants.Constants.REPLY_WHAT_DO_YOU_WANT_TO_SEARCH;
+import static org.hypnotriod.conversationengine.application.constants.Constants.REPLY_SEARCHING;
+import static org.hypnotriod.conversationengine.application.constants.Constants.REPLY_SHOWING_SEARCH_HISTORY;
 import org.hypnotriod.conversationengine.engine.entity.DialogReply;
 import org.hypnotriod.conversationengine.engine.entity.ReplyVariant;
 import org.hypnotriod.conversationengine.engine.service.DialogContextService;
 import org.hypnotriod.conversationengine.engine.service.DialogReplyService;
-import static org.hypnotriod.conversationengine.Constants.REPLY_NO_SEARCH_HISTORY_FOUND;
+import static org.hypnotriod.conversationengine.application.constants.Constants.REPLY_NO_SEARCH_HISTORY_FOUND;
 
 /**
  *

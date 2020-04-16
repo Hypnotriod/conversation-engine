@@ -1,13 +1,13 @@
-package org.hypnotriod.conversationengine;
+package org.hypnotriod.conversationengine.application.commandhandler;
 
 import com.google.inject.internal.util.ImmutableList;
-import static org.hypnotriod.conversationengine.Constants.CMD_SEARCH;
+import static org.hypnotriod.conversationengine.application.constants.Constants.CMD_SEARCH;
 import org.hypnotriod.conversationengine.engine.annotation.CommandHandler;
 import org.hypnotriod.conversationengine.engine.commandhandler.UtteranceCommandHandler;
 import org.hypnotriod.conversationengine.engine.vo.UtteranceCommandHandlerResult;
 import org.hypnotriod.conversationengine.engine.vo.UtteranceRecognitionResult;
-import static org.hypnotriod.conversationengine.Constants.CONTEXT_NO;
-import static org.hypnotriod.conversationengine.Constants.REPLY_WHAT_DO_YOU_WANT_TO_SEARCH;
+import static org.hypnotriod.conversationengine.application.constants.Constants.CONTEXT_NO;
+import static org.hypnotriod.conversationengine.application.constants.Constants.REPLY_WHAT_DO_YOU_WANT_TO_SEARCH;
 
 /**
  *

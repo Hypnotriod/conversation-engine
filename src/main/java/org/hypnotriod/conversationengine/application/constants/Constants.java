@@ -1,4 +1,4 @@
-package org.hypnotriod.conversationengine;
+package org.hypnotriod.conversationengine.application.constants;
 
 /**
  *

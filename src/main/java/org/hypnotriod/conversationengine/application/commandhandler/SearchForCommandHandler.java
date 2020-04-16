@@ -1,4 +1,4 @@
-package org.hypnotriod.conversationengine;
+package org.hypnotriod.conversationengine.application.commandhandler;
 
 import com.google.inject.internal.util.ImmutableList;
 import java.io.IOException;
@@ -8,10 +8,10 @@ import org.hypnotriod.conversationengine.engine.commandhandler.UtteranceCommandH
 import org.hypnotriod.conversationengine.engine.vo.UtteranceRecognitionResult;
 import org.hypnotriod.conversationengine.engine.vo.UtteranceCommandHandlerResult;
 import org.hypnotriod.conversationengine.engine.annotation.CommandHandler;
-import static org.hypnotriod.conversationengine.Constants.CMD_SEARCH_FOR;
-import static org.hypnotriod.conversationengine.Constants.CONTEXT_NO;
-import static org.hypnotriod.conversationengine.Constants.CONTEXT_SEARCH_FOR;
-import static org.hypnotriod.conversationengine.Constants.REPLY_SEARCHING;
+import static org.hypnotriod.conversationengine.application.constants.Constants.CMD_SEARCH_FOR;
+import static org.hypnotriod.conversationengine.application.constants.Constants.CONTEXT_NO;
+import static org.hypnotriod.conversationengine.application.constants.Constants.CONTEXT_SEARCH_FOR;
+import static org.hypnotriod.conversationengine.application.constants.Constants.REPLY_SEARCHING;
 
 /**
  *
